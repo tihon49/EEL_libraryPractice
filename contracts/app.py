@@ -59,6 +59,55 @@ def from_python() -> list:
     eel.get_data(data_list)
 
 
+@eel.expose
+def add_contract_into_db(data: dict):
+    """
+    Запись внесенных на странице добавления нового договора данных в БД
+    Args:
+        data (dict): словарь с данными нового договора
+
+    Returns:
+        запис нового договора в БД
+    """
+
+    # проверка на заполнение всех полей
+    for k, v in data.items():
+        if not k or not v:
+            print(f'key:{k} hase no value')
+            return None
+
+    # проверка на правильнось введеного id агента
+    agent_query = session.query(Agent).filter_by(id=data['agent_id']).all()
+    if agent_query:
+        print(f'Выбран контрагент: {agent_query[0]}')
+    else:
+        print('Не вероно указан id агента...\n')
+        return
+
+    # проверка номера договора
+    contract_query = session.query(Contract).filter_by(agent_id=data['agent_id'], number=data['number']).all()
+    if contract_query:
+        print(f'У контрагента {agent_query[0]} уже есть договор {contract_query[0]}')
+        return
+        
+    new_contract = Contract(agent_id = data['agent_id'],
+                            number = data['number'],
+                            description = data['description'],
+                            contract_sum = data['contract_sum'],
+                            contract_balance = data['contract_balance'],
+                            date_of_conclusion = data['date_of_conclusion'],
+                            date_of_start = data['date_of_start'],
+                            date_of_end = data['date_of_end'],
+                            validity = data['validity'],
+                            days_passed = data['days_passed'],
+                            days_left = data['days_left']
+    )
+    
+    session.add(new_contract)
+    session.commit()
+    print(f'Новый договор добавлен!')
+
+
 # create_tables()
 # delete_all_tables()
 # from_python()

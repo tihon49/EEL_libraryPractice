@@ -10,8 +10,31 @@
 </head>
 <body>
     <h1>Здесь будет добавление договоров</h1>
-    <button>
-        <a href="index.html"> Назад </a>
-    </button>
+
+    <div class="box">
+        <form action="#">
+			<input type="Integer" id="agent_id" required placeholder="id контрагента">
+            <input type="text" id="number" required placeholder="Номер договора">
+            <input type="text" id="description" required placeholder="Предмет договора">
+            <input type="Integer" id="contract_sum" required placeholder="Сумма договора">
+            <input type="text" id="contract_balance" required placeholder="Остаток средств">
+            <input type="text" id="date_of_conclusion" required placeholder="Дата заключения">
+            <input type="text" id="date_of_start" required placeholder="Дата начала использования">
+            <input type="text" id="date_of_end" required placeholder="Дата окончания">
+            <input type="text" id="validity" required placeholder="Срок действия">
+            <input type="text" id="days_passed" required placeholder="Прошло дней">
+            <input type="text" id="days_left" required placeholder="Осталось дней"> <br>
+			<input type="submit" id="btn_register" value="Зарегистрировать">
+		</form>
+    </div>
+
+    <div>
+        <button>
+            <a href="index.html"> Назад </a>
+        </button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+    <script src="contract_add.js"></script>
 </body>
 </html>
