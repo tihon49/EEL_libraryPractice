@@ -31,29 +31,29 @@ def from_python() -> list:
     data = show_full_data()  # получаем все договоры из БД
     data_list = []
 
-    # разюираем query на составляющие для последующей передачи в список
+    # разбираем query на составляющие для последующей передачи в список
+    # передавать будем словарь
     for item in data:
-        contract_number = item[1].number
-        agent_name = item[0].name
-        description = item[1].description
-        contract_sum = item[1].contract_sum
-        contract_balance = item[1].contract_balance
-        date_of_conclusion = item[1].date_of_conclusion
-        date_of_start = item[1].date_of_start
-        date_of_end = item[1].date_of_end
-        validity = item[1].validity
-        days_passed = item[1].days_passed
-        days_left = item[1].days_left
-        state = item[1].state
+        data_dict = {}
+        data_dict['contract_number'] = item[1].number
+        data_dict['agent_name'] = item[0].name
+        data_dict['description'] = item[1].description
+        data_dict['contract_sum'] = item[1].contract_sum
+        data_dict['contract_balance'] = item[1].contract_balance
+        data_dict['date_of_conclusion'] = item[1].date_of_conclusion
+        data_dict['date_of_start'] = item[1].date_of_start
+        data_dict['date_of_end'] = item[1].date_of_end
+        data_dict['validity'] = item[1].validity
+        data_dict['days_passed'] = item[1].days_passed
+        data_dict['days_left'] = item[1].days_left
+        data_dict['state'] = item[1].state
         
-        if state:
-            state = 'Активен'
+        if data_dict['state']:
+            data_dict['state'] = 'Активен'
         else:
-            state = 'Истек'
+            data_dict['state'] = 'Истек'
 
-        data_list.append([contract_number, agent_name, description, contract_sum, contract_balance,
-                        date_of_conclusion, date_of_start, date_of_end, validity,
-                        days_passed, days_left, state])
+        data_list.append(data_dict)
 
     # передаем список с данными в js функцию get_data()
     eel.get_data(data_list)
@@ -102,7 +102,7 @@ def add_contract_into_db(data: dict):
                             days_passed = data['days_passed'],
                             days_left = data['days_left']
     )
-    
+
     session.add(new_contract)
     session.commit()
     print(f'Новый договор добавлен!')
@@ -110,7 +110,7 @@ def add_contract_into_db(data: dict):
 
 # create_tables()
 # delete_all_tables()
-# from_python()
+from_python()
 
 if __name__ == '__main__':
     eel.start('index.html')

@@ -18,23 +18,23 @@ function get_data(data){
     let table = document.querySelector('table');
 
     // создаем стору tr и на основании полученных из функции (в питоне) from_python() данных
-    // создаем переменные (разбираем полученные из data_list данные)
+    // создаем переменные (разбираем полученные из data_dict данные)
     for (let i=0; i<data.length; i++){
         let tr = document.createElement('tr')
         table.append(tr)
 
-        let contract_number = data[i][0],
-            agent_name = data[i][1],
-            description = data[i][2],
-            contract_sum = data[i][3],
-            contract_balance = data[i][4],
-            date_of_conclusion = data[i][5],
-            date_of_start = data[i][6],
-            date_of_end = data[i][7],
-            validity = data[i][8],
-            days_passed = data[i][9],
-            days_left = data[i][10],
-            state = data[i][11];
+        let contract_number = data[i]['contract_number'],
+            agent_name = data[i]['agent_name'],
+            description = data[i]['description'],
+            contract_sum = data[i]['contract_sum'],
+            contract_balance = data[i]['contract_balance'],
+            date_of_conclusion = data[i]['date_of_conclusion'],
+            date_of_start = data[i]['date_of_start'],
+            date_of_end = data[i]['date_of_end'],
+            validity = data[i]['validity'],
+            days_passed = data[i]['days_passed'],
+            days_left = data[i]['days_left'],
+            state = data[i]['state'];
 
         // создаем список со всеми созданными выше переменными
         let lst = [contract_number, agent_name, description, contract_sum, contract_balance,
