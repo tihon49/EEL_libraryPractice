@@ -7,9 +7,13 @@
 // вызывает python функцию "from_python()"
 async function get_data_from_python(){
     await eel.from_python();
-}
+};
 
 get_data_from_python();
+
+async function detail_agent_btn(agent_name, contract_number) {
+    await eel.get_agent_details(agent_name, contract_number);
+};
 
 
 // эта функция вызывается из python кода, и получает данные из БД
@@ -65,12 +69,16 @@ function get_data(data){
 
         // теперь ссылку в которую положим кнопку
         let href_to_detail = document.createElement('a');
-        href_to_detail.href = 'agent_detail.html';
+        href_to_detail.href = 'contract_detail.html';
         td_for_btn.append(href_to_detail);
         
         // а теперь сделаем саму кнопку
         let detail_btn = document.createElement('button');
         detail_btn.innerHTML = 'Детально';
         href_to_detail.append(detail_btn);
+
+        detail_btn.addEventListener('click', function(){
+            detail_agent_btn(agent_name, contract_number)
+        });
     }
 }

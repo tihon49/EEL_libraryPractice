@@ -144,6 +144,15 @@ def add_new_agent(agent_name):
 
 
 @eel.expose
+def get_agent_details(agent_name, contract_number):
+    """после нажатия на кнопку детального отображения договора передаем на 
+       страницу детального отображения данные по выбранному договору
+    """
+    print(agent_name, contract_number)
+    # TODO: добавить логику детального отображения выбранного договора
+
+
+@eel.expose
 def add_new_bill(data: dict):
     """валидация и добавление нового счета
 
@@ -201,4 +210,4 @@ def add_new_bill(data: dict):
 # from_python()
 
 if __name__ == '__main__':
-    eel.start('index.html')
+    eel.start('index.html', size=(1400, 600))
