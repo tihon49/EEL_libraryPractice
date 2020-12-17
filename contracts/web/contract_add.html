@@ -8,30 +8,38 @@
     <link rel="stylesheet" href="style.css">
     <script src="eel.js"></script>
 </head>
-<body>
-    <h1>Здесь будет добавление договоров</h1>
+<body class="contract_body">
+    <h1 class="h1_contract_add">Добавление договоров</h1>
 
     <div class="box">
-        <form action="#">
-			<input type="Integer" id="agent_id" required placeholder="id контрагента">
-            <input type="text" id="number" required placeholder="Номер договора">
-            <input type="text" id="description" required placeholder="Предмет договора">
-            <input type="Integer" id="contract_sum" required placeholder="Сумма договора">
-            <input type="text" id="contract_balance" required placeholder="Остаток средств">
-            <input type="text" id="date_of_conclusion" required placeholder="Дата заключения">
-            <input type="text" id="date_of_start" required placeholder="Дата начала использования">
-            <input type="text" id="date_of_end" required placeholder="Дата окончания">
-            <input type="text" id="validity" required placeholder="Срок действия">
-            <input type="text" id="days_passed" required placeholder="Прошло дней">
-            <input type="text" id="days_left" required placeholder="Осталось дней"> <br>
-			<input type="submit" id="btn_register" value="Зарегистрировать">
-		</form>
-    </div>
-
-    <div>
-        <button>
-            <a href="index.html"> Назад </a>
-        </button>
+        <div class="container">
+            <div class="row">
+                <form action="#">
+                    <input class="col-md-5" type="Integer" id="agent_id" required placeholder="id контрагента">
+                    <input class="col-md-5" type="text" id="number" required placeholder="Номер договора">
+                    <textarea class="col-md-10" id="description" required placeholder="Предмет договора"></textarea>
+                    <input class="col-md-5" type="Integer" id="contract_sum" required placeholder="Сумма договора">
+                    <input class="col-md-5" type="text" id="contract_balance" required placeholder="Остаток средств">
+                    <input class="col-md-5" type="text" id="date_of_conclusion" required placeholder="Дата заключения">
+                    <input class="col-md-5" type="text" id="date_of_start" required placeholder="Дата начала использования">
+                    <input class="col-md-5" type="text" id="date_of_end" required placeholder="Дата окончания">
+                    <input class="col-md-5" type="text" id="validity" required placeholder="Срок действия">
+                    <input class="col-md-5" type="text" id="days_passed" required placeholder="Прошло дней">
+                    <input class="col-md-5" type="text" id="days_left" required placeholder="Осталось дней"> <br>
+                    <button class="col-md-5" type="submit" id="btn_contract_register">Зарегистрировать</button><br>
+                </form>
+                <div>
+                    <a href="index.html">
+                        <button class="col-md-5" id="btn_back" type="submit">Назад</button>
+                    </a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8 offset-2">
+                    
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>

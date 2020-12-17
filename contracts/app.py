@@ -1,3 +1,4 @@
+import re
 import sqlalchemy as db
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm.session import sessionmaker
@@ -62,33 +63,34 @@ def from_python() -> list:
 @eel.expose
 def add_contract_into_db(data: dict):
     """
-    Запись внесенных на странице добавления нового договора данных в БД
+    Запись внесенных на странице contract_add.html данных в БД
+
     Args:
         data (dict): словарь с данными нового договора
 
     Returns:
-        запис нового договора в БД
+        запись нового договора в БД
     """
 
     # проверка на заполнение всех полей
     for k, v in data.items():
         if not k or not v:
-            print(f'key:{k} hase no value')
-            return None
+            print(f'параметр: {k} не заполнен')
+            return False
 
-    # проверка на правильнось введеного id агента
+    # валидадция введеного id агента
     agent_query = session.query(Agent).filter_by(id=data['agent_id']).all()
     if agent_query:
         print(f'Выбран контрагент: {agent_query[0]}')
     else:
         print('Не вероно указан id агента...\n')
-        return
+        return False
 
-    # проверка номера договора
+    # валидация номера договора
     contract_query = session.query(Contract).filter_by(agent_id=data['agent_id'], number=data['number']).all()
     if contract_query:
         print(f'У контрагента {agent_query[0]} уже есть договор {contract_query[0]}')
-        return
+        return False
         
     new_contract = Contract(agent_id = data['agent_id'],
                             number = data['number'],
@@ -106,11 +108,42 @@ def add_contract_into_db(data: dict):
     session.add(new_contract)
     session.commit()
     print(f'Новый договор добавлен!')
+    return True
+
+
+@eel.expose
+def add_new_agent(agent_name):
+    """валидация и запись нового контрагента в БД
+
+    Args:
+        agent_name (str): имя контрагента из формы на стр. agent_add.html
+    """
+    
+    agent = session.query(Agent).filter_by(name=agent_name).all()
+
+    # проверка на наличие контрагента в базе данных
+    if agent:
+        print(agent[0], 'уже сущесвует.')
+        return False
+
+    # валидация имени контрагента
+    if agent_name:
+        print(agent_name)
+        new_agent = Agent(name=agent_name)
+        session.add(new_agent)
+        session.commit()
+        new_agent_id = session.query(Agent).filter_by(name=agent_name).first().id
+        print(f'Добавлен новый контрагент: {agent_name} c id: {new_agent_id}')
+    else:
+        print(f'Не верное имя агента: {agent_name}')
+        return False
+
+    return True
 
 
 # create_tables()
 # delete_all_tables()
-from_python()
+# from_python()
 
 if __name__ == '__main__':
     eel.start('index.html')

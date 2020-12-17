@@ -1,4 +1,4 @@
-let btn = document.querySelector('#btn_register');
+let btn = document.querySelector('#btn_contract_register');
 btn.addEventListener('click', foo);
 
 eel.expose(from_python);

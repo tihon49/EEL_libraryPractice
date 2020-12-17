@@ -1,13 +1,15 @@
 
 // создаем листнер на конопке, по клику на которую вызывается 
 // функция get_data_from_python()
-let btn = document.querySelector('#btn');
-btn.addEventListener('click', get_data_from_python);
+// let btn = document.querySelector('#btn');
+// btn.addEventListener('click', get_data_from_python);
 
 // вызывает python функцию "from_python()"
 async function get_data_from_python(){
     await eel.from_python();
 }
+
+get_data_from_python();
 
 
 // эта функция вызывается из python кода, и получает данные из БД
@@ -18,7 +20,7 @@ function get_data(data){
     let table = document.querySelector('table');
 
     // создаем стору tr и на основании полученных из функции (в питоне) from_python() данных
-    // создаем переменные (разбираем полученные из data_dict данные)
+    // создаем переменные (разбираем полученные из data_list данные)
     for (let i=0; i<data.length; i++){
         let tr = document.createElement('tr')
         table.append(tr)
@@ -42,7 +44,7 @@ function get_data(data){
                   days_left, state];
 
         // создаем переменную индекса на основании длинны полученного списка
-        let td_index = document.createElement('td');
+        let td_index = document.createElement('th');
         td_index.style = 'border: 1px solid #000;';
         td_index.innerHTML = i + 1;
         tr.append(td_index);
