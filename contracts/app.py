@@ -1,3 +1,4 @@
+from os import name
 import re
 import sqlalchemy as db
 from sqlalchemy.ext.declarative import declarative_base
@@ -139,8 +140,60 @@ def add_new_agent(agent_name):
     else:
         print(f'Не верное имя агента: {agent_name}')
         return False
-
     return True
+
+
+@eel.expose
+def add_new_bill(data: dict):
+    """валидация и добавление нового счета
+
+    Args:
+        data (dict): словарь с данными счета
+    """
+
+    # проверка на заполнение всех полей
+    for k, v in data.items():
+        if not k or not v:
+            print(f'параметр: {k} не заполнен')
+            return False
+
+    # проверяем верно ли указан контрагента
+    valid_agent = session.query(Agent).filter_by(name=data['agent_name']).first()
+
+    if valid_agent:
+        agent_id = int(valid_agent.id)
+    else:
+        print(f"Контрагент '{data['agent_name']}' отсутствует в базе данных")
+        return False
+
+    # проверка валидности договора
+    contract = session.query(Contract).filter_by(agent_id=agent_id, number=data['contract_number']).first()
+    print(contract)
+
+    if contract:
+        # проверим вдруг счет с таким номером у данного договора уже есть
+        bill_number = data['bill_number']
+
+        if bill_number not in [b.bill_number for b in contract.bills]:
+            bill_sum = int(data['bill_sum'])
+            act_number = data['act_number']
+            act_sum = int(data['act_sum'])
+            bill_date = data['bill_date']
+            act_date = data['act_date']
+
+            new_bill = Bill(agent_id=agent_id, contract_number=data['contract_number'], bill_number=bill_number,
+                            act_number=act_number, bill_sum=bill_sum, act_sum=act_sum, bill_date=bill_date,
+                            act_date=act_date)
+            session.add(new_bill)
+            session.commit()
+            print(f'Счет {bill_number} успешно добавлен!')
+            return True
+        else:
+            print('Данный счет уже есть в базе')
+    else:
+        print(f"У контрагента {data['agent_name']} нет договора № {data['contract_number']}")
+    
+    return False
 
 
 # create_tables()

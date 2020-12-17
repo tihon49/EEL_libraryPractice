@@ -56,8 +56,10 @@ class Bill(Base):
     agent_id = db.Column(db.Integer, nullable=False)
     contract_number = db.Column(db.String, nullable=False)
     bill_number = db.Column(db.String, nullable=False)
-    act_number = db.Column(db.String, nullable=False)
+    bill_date = db.Column(db.String(24), nullable=False)
     bill_sum = db.Column(db.Integer, nullable=False)
+    act_number = db.Column(db.String, nullable=False)
+    act_date = db.Column(db.String(24), nullable=False)
     act_sum = db.Column(db.Integer, nullable=False)
 
     __table_args__ = (db.ForeignKeyConstraint((agent_id, contract_number), ['contracts.agent_id', 'contracts.number']),
