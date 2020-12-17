@@ -79,23 +79,25 @@ def add_contract_into_db(data: dict):
             return False
 
     # валидадция введеного id агента
-    agent_query = session.query(Agent).filter_by(id=data['agent_id']).all()
+    agent_query = session.query(Agent).filter_by(name=data['agent_name']).all()
     if agent_query:
-        print(f'Выбран контрагент: {agent_query[0]}')
+        agent_id = agent_query[0].id
+        print(f'Выбран контрагент: {agent_query[0].name}, id: {agent_id}')
     else:
-        print('Не вероно указан id агента...\n')
+        print('Не вероно указано имя контрагента...\n')
         return False
 
     # валидация номера договора
-    contract_query = session.query(Contract).filter_by(agent_id=data['agent_id'], number=data['number']).all()
+    contract_query = session.query(Contract).filter_by(agent_id=agent_id, number=data['number']).all()
+
     if contract_query:
         print(f'У контрагента {agent_query[0]} уже есть договор {contract_query[0]}')
         return False
         
-    new_contract = Contract(agent_id = data['agent_id'],
+    new_contract = Contract(agent_id = agent_id,
                             number = data['number'],
                             description = data['description'],
-                            contract_sum = data['contract_sum'],
+                            contract_sum = data['contract_sum'],    
                             contract_balance = data['contract_balance'],
                             date_of_conclusion = data['date_of_conclusion'],
                             date_of_start = data['date_of_start'],

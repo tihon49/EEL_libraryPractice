@@ -3,7 +3,7 @@ btn.addEventListener('click', foo);
 
 eel.expose(from_python);
 async function foo() {
-    let agent_id = document.querySelector('#agent_id').value,
+    let agent_name = document.querySelector('#agent_name').value,
         number = document.querySelector('#number').value,
         contract_sum = document.querySelector('#contract_sum').value,
         contract_balance = document.querySelector('#contract_balance').value,
@@ -15,7 +15,7 @@ async function foo() {
         days_left = document.querySelector('#days_left').value,
         description = document.querySelector('#description').value;
        
-        data = {'agent_id': agent_id, 
+        data = {'agent_name': agent_name, 
                 'number': number, 
                 'description': description, 
                 'contract_sum': contract_sum, 
