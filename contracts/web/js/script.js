@@ -21,7 +21,7 @@ function get_data(data){
 
     // создаем стору tr и на основании полученных из функции (в питоне) from_python() данных
     // создаем переменные (разбираем полученные из data_list данные)
-    for (let i=0; i<data.length; i++){
+    for (let i = 0; i < data.length; i++){
         let tr = document.createElement('tr')
         table.append(tr)
 
@@ -56,5 +56,21 @@ function get_data(data){
             td.innerHTML = lst[item];
             tr.append(td);
         }
+
+        // добавляем кнопку детализации
+        // сначала td куда все это положим
+        let td_for_btn = document.createElement('td');
+        td_for_btn.style = 'border: 1px solid #000;';
+        tr.append(td_for_btn);
+
+        // теперь ссылку в которую положим кнопку
+        let href_to_detail = document.createElement('a');
+        href_to_detail.href = 'agent_detail.html';
+        td_for_btn.append(href_to_detail);
+        
+        // а теперь сделаем саму кнопку
+        let detail_btn = document.createElement('button');
+        detail_btn.innerHTML = 'Детально';
+        href_to_detail.append(detail_btn);
     }
 }
