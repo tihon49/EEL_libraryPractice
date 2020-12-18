@@ -1,7 +1,7 @@
 let btn = document.querySelector('#btn_contract_register');
 btn.addEventListener('click', foo);
 
-eel.expose(from_python);
+
 async function foo() {
     let agent_name = document.querySelector('#agent_name').value,
         number = document.querySelector('#number').value,

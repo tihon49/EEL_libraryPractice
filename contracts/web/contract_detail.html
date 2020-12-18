@@ -9,30 +9,28 @@
     <script src="eel.js"></script>
 </head>
 <body class="contract_body">
-    <h1 class="h1_contract_add">контрагент</h1>
-
-    <div class="box">
-        <div class="container">
-            <div class="row">
-                <form action="#">
-                    <div class="agent_detail">
-                        <h3>Детализация</h3>
-                    </div>
-                </form>
-                <div>
-                    <a href="index.html">
-                        <button class="col-md-5" id="btn_back" type="submit">Назад</button>
-                    </a>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-8 offset-2">
-                    
-                </div>
-            </div>
+    <div class="table_div box">
+        <div id="div_header">
+            <h1 class="h1_contract_add">контрагент</h1>
+        </div>
+        <table id="bills_table">
+            <tr>
+                <th>No.</th>
+                <th>Номер счета</th>
+                <th>Дата счета</th>
+                <th>Сумма счета</th>
+                <th>Номер акта</th>
+                <th>Дата акта</th>
+                <th>Сумма акта</th>
+            </tr>
+        </table>
+        <div>
+            <a href="index.html">
+                <button class="col-md-5" id="btn_back" type="submit">Назад</button>
+            </a>
         </div>
     </div>
-
+  
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
     <script src="js/contract_detail.js"></script>
 </body>

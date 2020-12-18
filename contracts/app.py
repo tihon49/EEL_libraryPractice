@@ -143,13 +143,40 @@ def add_new_agent(agent_name):
     return True
 
 
+contract_detail_data = {}
 @eel.expose
 def get_agent_details(agent_name, contract_number):
-    """после нажатия на кнопку детального отображения договора передаем на 
-       страницу детального отображения данные по выбранному договору
+    """после нажатия на кнопку детального отображения договора передаем в 
+       словарь contract_detail_data данные по контракту в виде списка
     """
-    print(agent_name, contract_number)
-    # TODO: добавить логику детального отображения выбранного договора
+    # print(agent_name, contract_number)
+    agent_id = session.query(Agent).filter_by(name=agent_name).first().id
+    contract = session.query(Contract).filter_by(agent_id=agent_id, number=contract_number).first()
+    contract_bills = []
+
+    for bill in contract.bills:
+        data = {'bill_number': bill.bill_number,
+                'bill_sum': bill.bill_sum,
+                'bill_date': bill.bill_date,
+                'act_number': bill.act_number,
+                'act_sum': bill.act_sum,
+                'act_date': bill.act_date
+        }
+        contract_bills.append(data)
+
+    # print(contract.number, agent_name, contract.bills)
+    contract_detail_data['data'] = [contract.number, agent_name, contract_bills]
+
+
+@eel.expose
+def return_contract_detail_to_js():
+    """передаем на js сторону список с данными по договору
+       для отображения в таблице на странице
+    """
+
+    data = contract_detail_data['data']
+    pprint(data)
+    eel.print_contract_detail_data(data)
 
 
 @eel.expose
