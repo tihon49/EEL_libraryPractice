@@ -34,7 +34,7 @@ def from_python() -> list:
     data_list = []
 
     # разбираем query на составляющие для последующей передачи в список
-    # передавать будем словарь
+    # передавать будем словарь    
     for item in data:
         data_dict = {}
         data_dict['contract_number'] = item[1].number
@@ -42,18 +42,19 @@ def from_python() -> list:
         data_dict['description'] = item[1].description
         data_dict['contract_sum'] = item[1].contract_sum
         data_dict['contract_balance'] = item[1].contract_balance
-        data_dict['date_of_conclusion'] = item[1].date_of_conclusion
-        data_dict['date_of_start'] = item[1].date_of_start
-        data_dict['date_of_end'] = item[1].date_of_end
+        data_dict['date_of_conclusion'] = item[1].date_of_conclusion.strftime('%d.%m.%Y')
+        data_dict['date_of_start'] = item[1].date_of_start.strftime('%d.%m.%Y')
+        data_dict['date_of_end'] = item[1].date_of_end.strftime('%d.%m.%Y')
         data_dict['validity'] = item[1].validity
         data_dict['days_passed'] = item[1].days_passed
         data_dict['days_left'] = item[1].days_left
         data_dict['state'] = item[1].state
         
-        if data_dict['state']:
+        if data_dict['state'] and  data_dict['days_left'] > 0:
             data_dict['state'] = 'Активен'
         else:
             data_dict['state'] = 'Истек'
+            data_dict['days_left'] = 0
 
         data_list.append(data_dict)
 
@@ -94,18 +95,34 @@ def add_contract_into_db(data: dict):
     if contract_query:
         print(f'У контрагента {agent_query[0]} уже есть договор {contract_query[0]}')
         return False
+
+    from datetime import date, datetime
+
+    start_year = int(data['date_of_start'].split('.')[2])
+    start_month = int(data['date_of_start'].split('.')[1])
+    start_day = int(data['date_of_start'].split('.')[0])
+    date_of_start = date(start_year, start_month, start_day)
+
+    end_year = int(data['date_of_end'].split('.')[2])
+    end_month = int(data['date_of_end'].split('.')[1])
+    end_day = int(data['date_of_end'].split('.')[0])
+    date_of_end = date(end_year, end_month, end_day)
+
+    validity = (date_of_end - date_of_start).days
+    now = datetime.now().date()
+    days_passed = (now - date_of_start).days
+    days_left = (date_of_end - now).days
         
     new_contract = Contract(agent_id = agent_id,
                             number = data['number'],
                             description = data['description'],
                             contract_sum = data['contract_sum'],    
-                            contract_balance = data['contract_balance'],
                             date_of_conclusion = data['date_of_conclusion'],
                             date_of_start = data['date_of_start'],
                             date_of_end = data['date_of_end'],
-                            validity = data['validity'],
-                            days_passed = data['days_passed'],
-                            days_left = data['days_left']
+                            validity = validity,
+                            days_passed = days_passed,
+                            days_left = days_left
     )
 
     session.add(new_contract)
@@ -157,10 +174,10 @@ def get_agent_details(agent_name, contract_number):
     for bill in contract.bills:
         data = {'bill_number': bill.bill_number,
                 'bill_sum': bill.bill_sum,
-                'bill_date': bill.bill_date,
+                'bill_date': bill.bill_date.strftime('%d.%m.%Y'),
                 'act_number': bill.act_number,
                 'act_sum': bill.act_sum,
-                'act_date': bill.act_date
+                'act_date': bill.act_date.strftime('%d.%m.%Y')
         }
         contract_bills.append(data)
 

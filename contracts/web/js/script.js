@@ -21,26 +21,27 @@ async function detail_agent_btn(agent_name, contract_number) {
 eel.expose(get_data); // Это вместо декоратора питоновского
 function get_data(data){
     // Привязываемся к тегу таблицы
-    let table = document.querySelector('table');
+    let table = document.querySelector('table'),
+        index = 0;
 
     // создаем стору tr и на основании полученных из функции (в питоне) from_python() данных
     // создаем переменные (разбираем полученные из data_list данные)
-    for (let i = 0; i < data.length; i++){
+    for (i of data){
         let tr = document.createElement('tr')
         table.append(tr)
 
-        let contract_number = data[i]['contract_number'],
-            agent_name = data[i]['agent_name'],
-            description = data[i]['description'],
-            contract_sum = data[i]['contract_sum'],
-            contract_balance = data[i]['contract_balance'],
-            date_of_conclusion = data[i]['date_of_conclusion'],
-            date_of_start = data[i]['date_of_start'],
-            date_of_end = data[i]['date_of_end'],
-            validity = data[i]['validity'],
-            days_passed = data[i]['days_passed'],
-            days_left = data[i]['days_left'],
-            state = data[i]['state'];
+        let contract_number = i['contract_number'],
+            agent_name = i['agent_name'],
+            description = i['description'],
+            contract_sum = i['contract_sum'],
+            contract_balance = i['contract_balance'],
+            date_of_conclusion = i['date_of_conclusion'],
+            date_of_start = i['date_of_start'],
+            date_of_end = i['date_of_end'],
+            validity = i['validity'],
+            days_passed = i['days_passed'],
+            days_left = i['days_left'],
+            state = i['state'];
 
         // создаем список со всеми созданными выше переменными
         let lst = [contract_number, agent_name, description, contract_sum, contract_balance,
@@ -50,14 +51,14 @@ function get_data(data){
         // создаем переменную индекса на основании длинны полученного списка
         let td_index = document.createElement('th');
         td_index.style = 'border: 1px solid #000;';
-        td_index.innerHTML = i + 1;
+        td_index.innerHTML = ++index;
         tr.append(td_index);
 
         // заполняем таблицу данными в теги td передавая туда аргументы из списка lst
-        for (let item = 0; item < lst.length; item++){
+        for (item of lst) {
             let td = document.createElement('td');
             td.style = 'border: 1px solid #000;';
-            td.innerHTML = lst[item];
+            td.innerHTML = item;
             tr.append(td);
         }
 
@@ -74,7 +75,7 @@ function get_data(data){
         
         // а теперь сделаем саму кнопку
         let detail_btn = document.createElement('button');
-        detail_btn.innerHTML = 'Детально';
+        detail_btn.innerHTML = 'Детализация';
         href_to_detail.append(detail_btn);
 
         detail_btn.addEventListener('click', function(){
