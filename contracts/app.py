@@ -37,6 +37,7 @@ def from_python() -> list:
     # передавать будем словарь    
     for item in data:
         data_dict = {}
+
         data_dict['contract_number'] = item[1].number
         data_dict['agent_name'] = item[0].name
         data_dict['description'] = item[1].description
@@ -58,8 +59,40 @@ def from_python() -> list:
 
         data_list.append(data_dict)
 
-    # передаем список с данными в js функцию get_data()
+    # передаем список с данными в js функцию get_data() для отрисовки таблицы
     eel.get_data(data_list)
+
+
+@eel.expose
+def add_new_agent(agent_name):
+    """валидация и запись нового контрагента в БД
+
+    Args:
+        agent_name (str): имя контрагента из формы на стр. agent_add.html
+    """
+    
+    agent = session.query(Agent).filter_by(name=agent_name).all()
+
+    # проверка на наличие контрагента в базе данных
+    if agent:
+        eel.alert_message(f'Контрагент "{agent[0].name}" уже сущесвует')
+        print(f'Контрагент "{agent[0].name}" уже сущесвует')
+        return False
+
+    # валидация имени контрагента
+    if agent_name:
+        print(agent_name)
+        new_agent = Agent(name=agent_name)
+        session.add(new_agent)
+        session.commit()
+        new_agent_id = session.query(Agent).filter_by(name=agent_name).first().id
+        eel.alert_message(f'Добавлен новый контрагент: {agent_name} c id: {new_agent_id}')
+        print(f'Добавлен новый контрагент: {agent_name} c id: {new_agent_id}')
+    else:
+        eel.alert_message(f'Не верное имя агента: {agent_name}')
+        print(f'Не верное имя агента: {agent_name}')
+        return False
+    return True
 
 
 @eel.expose
@@ -87,13 +120,15 @@ def add_contract_into_db(data: dict):
         print(f'Выбран контрагент: {agent_query[0].name}, id: {agent_id}')
     else:
         print('Не вероно указано имя контрагента...\n')
+        eel.alert_message('Не вероно указано имя контрагента...')
         return False
 
     # валидация номера договора
     contract_query = session.query(Contract).filter_by(agent_id=agent_id, number=data['number']).all()
 
     if contract_query:
-        print(f'У контрагента {agent_query[0]} уже есть договор {contract_query[0]}')
+        eel.alert_message(f'У контрагента {agent_query[0].name} уже есть договор № {contract_query[0].number}')
+        print(f'У контрагента {agent_query[0].name} уже есть договор № {contract_query[0].number}')
         return False
 
     from datetime import date, datetime
@@ -116,7 +151,8 @@ def add_contract_into_db(data: dict):
     new_contract = Contract(agent_id = agent_id,
                             number = data['number'],
                             description = data['description'],
-                            contract_sum = data['contract_sum'],    
+                            contract_sum = data['contract_sum'],
+                            contract_balance = data['contract_sum'], 
                             date_of_conclusion = data['date_of_conclusion'],
                             date_of_start = data['date_of_start'],
                             date_of_end = data['date_of_end'],
@@ -127,36 +163,8 @@ def add_contract_into_db(data: dict):
 
     session.add(new_contract)
     session.commit()
-    print(f'Новый договор добавлен!')
-    return True
-
-
-@eel.expose
-def add_new_agent(agent_name):
-    """валидация и запись нового контрагента в БД
-
-    Args:
-        agent_name (str): имя контрагента из формы на стр. agent_add.html
-    """
-    
-    agent = session.query(Agent).filter_by(name=agent_name).all()
-
-    # проверка на наличие контрагента в базе данных
-    if agent:
-        print(agent[0], 'уже сущесвует.')
-        return False
-
-    # валидация имени контрагента
-    if agent_name:
-        print(agent_name)
-        new_agent = Agent(name=agent_name)
-        session.add(new_agent)
-        session.commit()
-        new_agent_id = session.query(Agent).filter_by(name=agent_name).first().id
-        print(f'Добавлен новый контрагент: {agent_name} c id: {new_agent_id}')
-    else:
-        print(f'Не верное имя агента: {agent_name}')
-        return False
+    eel.alert_message('Новый договор добавлен!')
+    print('Новый договор добавлен!')
     return True
 
 
@@ -201,21 +209,23 @@ def add_new_bill(data: dict):
     """валидация и добавление нового счета
 
     Args:
-        data (dict): словарь с данными счета
+        data (dict): словарь с данными счета из bill_add.js 
     """
 
     # проверка на заполнение всех полей
     for k, v in data.items():
-        if not k or not v:
+        if not v:
+            eel.alert_message(f'параметр: {k} не заполнен')
             print(f'параметр: {k} не заполнен')
             return False
 
-    # проверяем верно ли указан контрагента
+    # проверяем верно ли указан контрагент
     valid_agent = session.query(Agent).filter_by(name=data['agent_name']).first()
 
     if valid_agent:
         agent_id = int(valid_agent.id)
     else:
+        eel.alert_message(f"Контрагент '{data['agent_name']}' отсутствует в базе данных")
         print(f"Контрагент '{data['agent_name']}' отсутствует в базе данных")
         return False
 
@@ -237,13 +247,18 @@ def add_new_bill(data: dict):
             new_bill = Bill(agent_id=agent_id, contract_number=data['contract_number'], bill_number=bill_number,
                             act_number=act_number, bill_sum=bill_sum, act_sum=act_sum, bill_date=bill_date,
                             act_date=act_date)
+            contract.contract_balance -= bill_sum
             session.add(new_bill)
             session.commit()
+    
+            eel.alert_message(f'Счет {bill_number} успешно добавлен!')
             print(f'Счет {bill_number} успешно добавлен!')
             return True
         else:
+            eel.alert_message('Данный счет уже есть в базе')
             print('Данный счет уже есть в базе')
     else:
+        eel.alert_message(f"У контрагента {data['agent_name']} нет договора № {data['contract_number']}")
         print(f"У контрагента {data['agent_name']} нет договора № {data['contract_number']}")
     
     return False
