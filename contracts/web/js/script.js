@@ -74,8 +74,17 @@ function get_data(data){
         td_for_btn.append(href_to_detail);
         
         // а теперь сделаем саму кнопку
-        let detail_btn = document.createElement('button');
-        detail_btn.innerHTML = 'Детализация';
+        let detail_btn = document.createElement('button'),
+            img = document.createElement('img');
+        
+        detail_btn.style = 'height: 33px; width: 33px; margin: 5px 20px';
+
+        // img.style = 'height: 25px; width: 25px;';
+        
+
+        img.src = 'img/cogs.png';
+        // detail_btn.innerHTML = 'Детально';
+        detail_btn.appendChild(img);
         href_to_detail.append(detail_btn);
 
         detail_btn.addEventListener('click', function(){
