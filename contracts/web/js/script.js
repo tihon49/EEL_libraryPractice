@@ -93,8 +93,8 @@ function get_data(data){
     }
 
     // предумал Ильин, я тут не при чем!
-    // дополнение пустых строк таблицы для красоты ;))))
-    for (let i = 0; i < 15; i++) {
+    // добавление пустых строк таблицы для красоты ;))))
+    while (index < 20) {
         let tr = document.createElement('tr')
         table.append(tr)
 

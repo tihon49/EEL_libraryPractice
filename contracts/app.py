@@ -20,7 +20,10 @@ eel.init('web')
 def show_full_data():
     """Получаем полные данные по контрагентам"""
 
-    query = session.query(Agent, Contract).filter(Agent.id == Contract.agent_id).order_by(Agent.id).all()
+    query = session.query(Agent, Contract).filter(Agent.id == Contract.agent_id).order_by(
+                                           Contract.state.desc()).order_by(
+                                               Agent.id).order_by(
+                                                   Contract.number).all()
     return query
 
 
@@ -56,6 +59,8 @@ def from_python() -> list:
         else:
             data_dict['state'] = 'Истек'
             data_dict['days_left'] = 0
+            item[1].state = False
+            session.commit()
 
         data_list.append(data_dict)
 
