@@ -50,14 +50,14 @@ function get_data(data){
 
         // создаем переменную индекса на основании длинны полученного списка
         let td_index = document.createElement('th');
-        td_index.style = 'border: 1px solid #000;';
+        td_index.style = 'border: 1px solid #e8e8ec;';
         td_index.innerHTML = ++index;
         tr.append(td_index);
 
         // заполняем таблицу данными в теги td передавая туда аргументы из списка lst
         for (item of lst) {
             let td = document.createElement('td');
-            td.style = 'border: 1px solid #000;';
+            td.style = 'border: 1px solid #e8e8ec;';
             td.innerHTML = item;
             tr.append(td);
         }
@@ -65,7 +65,7 @@ function get_data(data){
         // добавляем кнопку детализации
         // сначала td куда все это положим
         let td_for_btn = document.createElement('td');
-        td_for_btn.style = 'border: 1px solid #000;';
+        td_for_btn.style = 'border: 1px solid #e8e8ec;';
         tr.append(td_for_btn);
 
         // теперь ссылку в которую положим кнопку
@@ -91,4 +91,23 @@ function get_data(data){
             detail_agent_btn(agent_name, contract_number)
         });
     }
+
+    // предумал Ильин, я тут не при чем!
+    // дополнение пустых строк таблицы для красоты ;))))
+    for (let i = 0; i < 15; i++) {
+        let tr = document.createElement('tr')
+        table.append(tr)
+
+        let td_index = document.createElement('th');
+        td_index.style = 'border: 1px solid #e8e8ec; background-color: #e8e8ec;';
+        td_index.innerHTML = ++index;
+        tr.append(td_index);
+
+        for (let j = 0; j < 13; j++) {
+            let td = document.createElement('td');
+            td.style = 'border: 1px solid #e8e8ec;';
+            td.innerHTML = '';
+            tr.append(td);
+        }
+    };
 }
