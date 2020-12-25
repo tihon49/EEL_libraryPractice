@@ -243,9 +243,9 @@ def add_new_bill(data: dict):
         bill_number = data['bill_number']
 
         if bill_number not in [b.bill_number for b in contract.bills]:
-            bill_sum = int(data['bill_sum'])
+            bill_sum = float(data['bill_sum'])
             act_number = data['act_number']
-            act_sum = int(data['act_sum'])
+            act_sum = float(data['act_sum'])
             bill_date = data['bill_date']
             act_date = data['act_date']
 

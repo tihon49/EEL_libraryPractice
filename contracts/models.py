@@ -15,7 +15,7 @@ class Agent(Base):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(48), unique=True, nullable=False)
-    contracts = orm.relationship('Contract', backref='agent')
+    contracts = orm.relationship('Contract', cascade='all, delete', backref='agent')
 
     def __repr__(self):
         return f'<Agent(id="{self.id}", name="{self.name}")>'
@@ -38,7 +38,7 @@ class Contract(Base):
     days_left = db.Column(db.Integer)
     description = db.Column(db.String(128), nullable=False)
     state = db.Column(db.Boolean, default=True)
-    bills = orm.relationship('Bill', backref='contract')
+    bills = orm.relationship('Bill', cascade='all, delete', backref='contract')
 
     __table_args__ = (db.PrimaryKeyConstraint(agent_id, number),)
 
@@ -57,10 +57,10 @@ class Bill(Base):
     contract_number = db.Column(db.String, nullable=False)
     bill_number = db.Column(db.String, nullable=False)
     bill_date = db.Column(db.Date)
-    bill_sum = db.Column(db.Integer, nullable=False)
+    bill_sum = db.Column(db.Float, nullable=False)
     act_number = db.Column(db.String, nullable=False)
     act_date = db.Column(db.Date)
-    act_sum = db.Column(db.Integer, nullable=False)
+    act_sum = db.Column(db.Float, nullable=False)
 
     __table_args__ = (db.ForeignKeyConstraint((agent_id, contract_number), ['contracts.agent_id', 'contracts.number']),
                       db.PrimaryKeyConstraint(contract_number, bill_number))
