@@ -23,16 +23,29 @@ h1 {
     background-color: #e8e8ec;
 }
 
-table {
-    text-align: center;
-}
-
 .table_div {
     padding: 0 10px 10px 0;
     margin: 0 20px 0 0;
     /* border: 1px solid black; */
     border-radius: 10px;
     box-shadow: 2px 2px 20px 20px rgb(255, 255, 255);
+}
+
+table {
+    text-align: center;
+}
+
+/* закрепление главного th вверху экрана */
+.table_div.sticky th {
+    position: sticky;
+    top: 0;
+}
+
+.teable_body {
+    display: block;
+    height: 735px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 th {
@@ -111,6 +124,19 @@ button:hover {
 	padding: 20px;
 }
 
+.box2 {
+	margin: 10px auto;
+	text-align: center;
+	background-color: #e8e8ec;
+	font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+	width: 750px;
+	padding: 20px;
+}
+
+.table_detail {
+    display: flex;
+    flex-direction: column;
+}
 
 
 #btn_back, #btn_contract_register, #btn_agent_register, #btn_bill_register {

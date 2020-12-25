@@ -102,7 +102,7 @@ function get_data(data){
         td_index.innerHTML = ++index;
         tr.append(td_index);
 
-        for (let j = 0; j < 13; j++) {
+        for (let i = 0; i < 13; i++) {
             let td = document.createElement('td');
             td.style = 'border: 1px solid #e8e8ec;';
             td.innerHTML = '';
