@@ -10,6 +10,7 @@ a {
 .main_header {
     text-align: center;
     background-color: #e8e8ec;
+    /* padding: 5px 0 10px 0; */
 }
 
 h1 {
@@ -25,7 +26,7 @@ h1 {
 
 .table_div {
     padding: 0 10px 10px 0;
-    margin: 0 20px 0 0;
+    margin: 0 20px 0 5px;
     /* border: 1px solid black; */
     border-radius: 10px;
     box-shadow: 2px 2px 20px 20px rgb(255, 255, 255);
@@ -41,9 +42,9 @@ table {
     top: 0;
 }
 
-.teable_body {
+.table_body {
     display: block;
-    height: 735px;
+    height: 700px;
     overflow-y: auto;
     overflow-x: hidden;
 }
@@ -129,13 +130,39 @@ button:hover {
 	text-align: center;
 	background-color: #e8e8ec;
 	font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
-	width: 750px;
+	width: 850px;
 	padding: 20px;
 }
 
 .table_detail {
     display: flex;
     flex-direction: column;
+}
+
+.cart_block {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.cart_block_items {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 850px;
+    height: 200px;
+    margin: 20px 0 20px 0;
+}
+
+.cart {
+    border: none;
+    text-align: center;
+    border-radius: 4px;
+    box-shadow: 2px 2px 20px 20px rgb(255, 255, 255);
+    margin: 20px 0 40px 0;
+    padding: 40px 0 0 0;
+    width: 350px;
 }
 
 

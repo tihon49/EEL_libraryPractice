@@ -269,6 +269,12 @@ def add_new_bill(data: dict):
     return False
 
 
+@eel.expose
+def bill_delete(data):
+    """удаление счета"""
+    pprint(data)
+
+
 # create_tables()
 # delete_all_tables()
 # from_python()
