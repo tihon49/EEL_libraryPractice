@@ -30,9 +30,9 @@ table {
 .table_div {
     padding: 0 10px 10px 0;
     margin: 0 20px 0 0;
-    border: 1px solid black;
+    /* border: 1px solid black; */
     border-radius: 10px;
-    box-shadow: 2px 2px 10px 10px rgb(255, 255, 255);
+    box-shadow: 2px 2px 20px 20px rgb(255, 255, 255);
 }
 
 th {
@@ -113,8 +113,10 @@ button:hover {
 
 
 
-#btn_back, #btn_contract_register, #btn_agent_register {
+#btn_back, #btn_contract_register, #btn_agent_register, #btn_bill_register {
     width: 185px;
+    height: 35px;
+    margin: 10px 0 0 0;
 }
 
 #btn_add_agent, #btn_add_contract, #btn_add_bill {
@@ -123,18 +125,12 @@ button:hover {
     margin-bottom: 10px;
 }
 
-#description {
-    width: 84.333333%;
-    height: 60px;
-    margin-top: 5px;
-    padding-bottom: 0;
-}
-
 input {
     margin-top: 5px;
     border: none;
     border-radius: 4px;
-    width: 185px;
+    width: 225px;
+    height: 35px;
 }
 
 input:hover {
@@ -144,6 +140,9 @@ input:hover {
 textarea {
     border: none;
     border-radius: 4px;
+    width: 455px;
+    height: 80px;
+    margin: 10px 0 0 0;
 }
 
 .flex_wrapper {

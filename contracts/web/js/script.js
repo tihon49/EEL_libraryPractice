@@ -92,7 +92,6 @@ function get_data(data){
         });
     }
 
-    // предумал Ильин, я тут не при чем!
     // добавление пустых строк таблицы для красоты ;))))
     while (index < 20) {
         let tr = document.createElement('tr')
@@ -109,5 +108,5 @@ function get_data(data){
             td.innerHTML = '';
             tr.append(td);
         }
-    };
+    }
 }

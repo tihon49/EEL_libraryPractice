@@ -1,8 +1,6 @@
 let btn = document.querySelector('#btn_contract_register');
-btn.addEventListener('click', foo);
 
-
-async function foo() {
+btn.addEventListener('click', function() {
     let agent_name = document.querySelector('#agent_name').value,
         number = document.querySelector('#number').value,
         contract_sum = document.querySelector('#contract_sum').value,
@@ -19,5 +17,5 @@ async function foo() {
                 'date_of_start': date_of_start, 
                 'date_of_end': date_of_end
             };
-    await eel.add_contract_into_db(data);
-};
+    eel.add_contract_into_db(data);
+});

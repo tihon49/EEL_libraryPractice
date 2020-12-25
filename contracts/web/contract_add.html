@@ -9,33 +9,23 @@
     <script src="eel.js"></script>
 </head>
 <body class="contract_body">
-    <h1 class="h1_contract_add">Добавление договоров</h1>
+    <h1 class="h1_contract_add">Добавление договора</h1>
 
-    <div class="box">
-        <div class="container">
-            <div class="row">
-                <form action="#">
-                    <input class="col-md-5" type="text" id="agent_name" required placeholder="Имя контрагента">
-                    <input class="col-md-5" type="text" id="number" required placeholder="Номер договора">
-                    <textarea class="col-md-10" id="description" required placeholder="Предмет договора"></textarea>
-                    <input class="col-md-5" type="Integer" id="contract_sum" required placeholder="Сумма договора">
-                    <input class="col-md-5" type="text" id="date_of_conclusion" required placeholder="Дата заключения">
-                    <input class="col-md-5" type="text" id="date_of_start" required placeholder="Дата начала использования">
-                    <input class="col-md-5" type="text" id="date_of_end" required placeholder="Дата окончания">
-                    <button class="col-md-5" type="submit" id="btn_contract_register">Зарегистрировать</button><br>
-                </form>
-                <div>
-                    <a href="index.html">
-                        <button class="col-md-5" id="btn_back" type="submit">Назад</button>
-                    </a>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-8 offset-2">
-                    
-                </div>
-            </div>
-        </div>
+    <div class="box table_div">
+        <form action="#">
+            <input  type="text" id="agent_name" required placeholder="Имя контрагента">
+            <input  type="text" id="number" required placeholder="Номер договора">
+            <textarea c id="description" required placeholder="Предмет договора"></textarea>
+            <input  type="Integer" id="contract_sum" required placeholder="Сумма договора">
+            <input  type="text" id="date_of_conclusion" required placeholder="Дата заключения">
+            <input  type="text" id="date_of_start" required placeholder="Дата начала использования">
+            <input  type="text" id="date_of_end" required placeholder="Дата окончания">
+            <button  type="submit" id="btn_contract_register">Зарегистрировать</button>
+        </form>      
+        <form method="get" action="index.html">
+            <button type="submit" id="btn_back">Назад</button>
+        </form>
+        
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
