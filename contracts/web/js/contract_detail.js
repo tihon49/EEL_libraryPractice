@@ -27,6 +27,15 @@ function print_contract_detail_data(data) {
         index = 1;
 
     for (item of data_list) {
+        let bill_number = item['bill_number'],
+            bill_date = item['bill_date'],
+            bill_sum = item['bill_sum'],
+            act_number = item['act_number'],
+            act_date = item['act_date'],
+            act_sum = item['act_sum'];
+
+
+
         let tr = document.createElement('tr');
         table.append(tr);
 
@@ -35,27 +44,27 @@ function print_contract_detail_data(data) {
         tr.append(index_th);
 
         let td_bill_number = document.createElement('td');
-        td_bill_number.innerHTML = item.bill_number;
+        td_bill_number.innerHTML = bill_number;
         tr.append(td_bill_number);
 
         let td_bill_date = document.createElement('td');
-        td_bill_date.innerHTML = item.bill_date;
+        td_bill_date.innerHTML = bill_date;
         tr.append(td_bill_date)
 
         let td_bill_sum = document.createElement('td');
-        td_bill_sum.innerHTML = item.bill_sum;
+        td_bill_sum.innerHTML = bill_sum;
         tr.append(td_bill_sum);
 
         let td_act_number = document.createElement('td');
-        td_act_number.innerHTML = item.act_number;
+        td_act_number.innerHTML = act_number;
         tr.append(td_act_number);
 
         let td_act_date = document.createElement('td');
-        td_act_date.innerHTML = item.act_date;
+        td_act_date.innerHTML = act_date;
         tr.append(td_act_date);
 
         let td_act_sum = document.createElement('td');
-        td_act_sum.innerHTML = item.act_sum;
+        td_act_sum.innerHTML = act_sum;
         tr.append(td_act_sum);     
         
         // кнопка редактирования счета
@@ -88,11 +97,13 @@ function print_contract_detail_data(data) {
 
         // TODO: логику удаления счета. Сейчас передает данные только последнего счета
         td_btn2.addEventListener('click', function(){
-            data = {'agent_name': agent_name,
-                    'contract_number': contract_number,
-                    'bill_number': item.bill_number       
-            };
-            eel.bill_delete(data);
+            bill_delete(contract_number, bill_number);
         })
     }
 }
+
+function bill_delete(contract_number, bill_number) {
+    eel.bill_delete(contract_number, bill_number);
+}
+// TODO добавить обновление страницы после удаления счета.
+// TODO добавить подтверждение удаления

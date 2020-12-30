@@ -270,9 +270,26 @@ def add_new_bill(data: dict):
 
 
 @eel.expose
-def bill_delete(data):
+def bill_delete(contract_number, bill_number):
     """удаление счета"""
-    pprint(data)
+    bill = session.query(Bill).filter_by(contract_number=contract_number, bill_number=bill_number).first()
+    # print(bill)
+    session.delete(bill)
+    session.commit()
+    print(bill.bill_number, ' удален из базы данных.')
+
+
+@eel.expose
+def all_agents() -> list:
+    """получение списка имен всех контрагентов"""
+
+    query = session.query(Agent).all()
+    agents_list = []
+
+    for agent in query:
+        agents_list.append(agent.name)
+
+    return agents_list
 
 
 # create_tables()

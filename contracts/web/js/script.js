@@ -27,8 +27,8 @@ function get_data(data){
     // создаем стору tr и на основании полученных из функции (в питоне) from_python() данных
     // создаем переменные (разбираем полученные из data_list данные)
     for (i of data){
-        let tr = document.createElement('tr')
-        table.append(tr)
+        let tr = document.createElement('tr');
+        table.append(tr);
 
         let contract_number = i['contract_number'],
             agent_name = i['agent_name'],
@@ -85,7 +85,8 @@ function get_data(data){
         href_to_detail.append(detail_btn);
 
         detail_btn.addEventListener('click', function(){
-            detail_agent_btn(agent_name, contract_number)
+            // console.log(agent_name, contract_number);
+            detail_agent_btn(agent_name, contract_number);
         });
     }
 

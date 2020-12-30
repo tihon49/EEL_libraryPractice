@@ -32,6 +32,12 @@ h1 {
     box-shadow: 2px 2px 20px 20px rgb(255, 255, 255);
 }
 
+.agents__table {
+    display: flex;
+    font-display: row;
+    justify-content: center;
+}
+
 table {
     text-align: center;
 }
@@ -47,6 +53,17 @@ table {
     height: 700px;
     overflow-y: auto;
     overflow-x: hidden;
+}
+
+.agents__table_body {
+    display: block;
+    height: 450px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.agents__body{
+    background-color: rgb(248, 248, 231);
 }
 
 th {
@@ -76,7 +93,7 @@ table tr:hover {
 table tr td:hover {
     background-color: rgb(254, 255, 202);
     border-radius: 4px;
-    font-weight: bold;
+    /* font-weight: bold; */
 }
 
 
