@@ -23,7 +23,7 @@ async function show_all_agents() {
 
         td_options.style = 'border: 1px solid #e8e8ec;';
         option_btn.style = 'height: 33px; width: 33px; margin: 5px 20px';
-        img.src = 'img/cogs.png';
+        img.src = 'img/cogs.svg';
         option_btn.append(img);
         td_options.append(option_btn);
         tr.append(td_options);

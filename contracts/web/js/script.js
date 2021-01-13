@@ -79,7 +79,7 @@ function get_data(data){
         
         detail_btn.style = 'height: 33px; width: 33px; margin: 5px 20px';
         // img.style = 'height: 25px; width: 25px;';
-        img.src = 'img/cogs.png';
+        img.src = 'img/cogs.svg';
         // detail_btn.innerHTML = 'Детально';
         detail_btn.appendChild(img);
         href_to_detail.append(detail_btn);

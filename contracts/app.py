@@ -40,12 +40,21 @@ def from_python() -> list:
     # передавать будем словарь    
     for item in data:
         data_dict = {}
+        
+        # получаем все счета данного контракта
+        contract_bills_quey = session.query(Bill).filter_by(contract_number=item[1].number).all()
+        bills_total_sum = 0
+
+        # суммы всех счетов кладем в список счетов чтобы в дальнейшем при изменении или удалении счета
+        # в остатке суммы счета получать корректную сумму.
+        for bill in contract_bills_quey:
+            bills_total_sum += bill.bill_sum
 
         data_dict['contract_number'] = item[1].number
         data_dict['agent_name'] = item[0].name
         data_dict['description'] = item[1].description
         data_dict['contract_sum'] = item[1].contract_sum
-        data_dict['contract_balance'] = item[1].contract_balance
+        data_dict['contract_balance'] = item[1].contract_sum - bills_total_sum
         data_dict['date_of_conclusion'] = item[1].date_of_conclusion.strftime('%d.%m.%Y')
         data_dict['date_of_start'] = item[1].date_of_start.strftime('%d.%m.%Y')
         data_dict['date_of_end'] = item[1].date_of_end.strftime('%d.%m.%Y')
@@ -252,7 +261,6 @@ def add_new_bill(data: dict):
             new_bill = Bill(agent_id=agent_id, contract_number=data['contract_number'], bill_number=bill_number,
                             act_number=act_number, bill_sum=bill_sum, act_sum=act_sum, bill_date=bill_date,
                             act_date=act_date)
-            contract.contract_balance -= bill_sum
             session.add(new_bill)
             session.commit()
     
@@ -270,14 +278,17 @@ def add_new_bill(data: dict):
 
 
 @eel.expose
-def bill_delete(contract_number, bill_number):
+def bill_delete_python(contract_number, bill_number):
     """удаление счета"""
+
     bill = session.query(Bill).filter_by(contract_number=contract_number, bill_number=bill_number).first()
     # print(bill)
     session.delete(bill)
     session.commit()
-    print(bill.bill_number, ' удален из базы данных.')
-
+    print(f'Счет №{bill.bill_number} удален из базы данных.')
+    eel.alert_message(f'Счет №{bill.bill_number} удален из базы данных.')
+    eel.refresh_contracts_detail()  #обновление страницы
+    
 
 @eel.expose
 def all_agents() -> list:

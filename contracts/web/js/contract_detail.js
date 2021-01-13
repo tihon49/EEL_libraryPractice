@@ -76,7 +76,7 @@ function print_contract_detail_data(data) {
             img = document.createElement('img');
 
         td_btn.style = 'height: 33px; width: 33px; margin: 5px 20px';
-        img.src = 'img/repair.png';
+        img.src = 'img/repair.svg';
         td_btn.appendChild(img);
         td_for_btn.append(td_btn);
         // TODO добавить окно редактирования счета
@@ -91,19 +91,31 @@ function print_contract_detail_data(data) {
             img2 = document.createElement('img');
 
         td_btn2.style = 'height: 33px; width: 33px; margin: 5px 20px;';
-        img2.src = 'img/trash.png';
+        img2.src = 'img/trash.svg';
         td_btn2.appendChild(img2);
         td_for_btn2.append(td_btn2);
 
-        // TODO: логику удаления счета. Сейчас передает данные только последнего счета
+        // удаляем счет из БД
         td_btn2.addEventListener('click', function(){
-            bill_delete(contract_number, bill_number);
+            chouse = confirm('Вы уверенны что хотитие удалить счет?');
+
+            if (chouse) {
+                eel.bill_delete_python(contract_number, bill_number);  //удаляем счет из бд
+                refresh_page_data(agent_name, contract_number);  // получаем обновленные данные по счетам из БД
+            } 
         })
     }
 }
 
-function bill_delete(contract_number, bill_number) {
-    eel.bill_delete(contract_number, bill_number);
+
+// функция обновления страницы
+eel.expose(refresh_contracts_detail);
+function refresh_contracts_detail() {
+    window.location = ('contract_detail.html');
 }
-// TODO добавить обновление страницы после удаления счета.
-// TODO добавить подтверждение удаления
+
+
+// функция получения данных по договору из БД
+async function refresh_page_data(agent_name, contract_number) {
+    await eel.get_agent_details(agent_name, contract_number);
+}
