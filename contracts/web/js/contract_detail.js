@@ -72,31 +72,37 @@ function print_contract_detail_data(data) {
         td_for_btn.style = 'border: 1px solid #e8e8ec;';
         tr.append(td_for_btn);
 
-        let td_btn = document.createElement('button'),
+        let btn_repair = document.createElement('button'),
+            repair_href = document.createElement('a'),
             img = document.createElement('img');
 
-        td_btn.style = 'height: 33px; width: 33px; margin: 5px 20px';
-        img.src = 'img/repair.svg';
-        td_btn.appendChild(img);
-        td_for_btn.append(td_btn);
-        // TODO добавить окно редактирования счета
+        repair_href.href = 'bill_detail.html';
+        repair_href.append(btn_repair);
 
+        btn_repair.addEventListener('click', function(){
+            eel.bill_detail(contract_number, bill_number);
+        })
+
+        btn_repair.style = 'height: 33px; width: 33px; margin: 5px 20px';
+        img.src = 'img/repair.svg';
+        btn_repair.appendChild(img);
+        td_for_btn.append(repair_href);
 
         // кнопка удаления счета
         let td_for_btn2 = document.createElement('td');
         td_for_btn2.style = 'border: 1px solid #e8e8ec;';
         tr.append(td_for_btn2);
 
-        let td_btn2 = document.createElement('button'),
+        let td_btn_delete = document.createElement('button'),
             img2 = document.createElement('img');
 
-        td_btn2.style = 'height: 33px; width: 33px; margin: 5px 20px;';
+        td_btn_delete.style = 'height: 33px; width: 33px; margin: 5px 20px;';
         img2.src = 'img/trash.svg';
-        td_btn2.appendChild(img2);
-        td_for_btn2.append(td_btn2);
+        td_btn_delete.appendChild(img2);
+        td_for_btn2.append(td_btn_delete);
 
         // удаляем счет из БД
-        td_btn2.addEventListener('click', function(){
+        td_btn_delete.addEventListener('click', function(){
             chouse = confirm('Вы уверенны что хотитие удалить счет?');
 
             if (chouse) {

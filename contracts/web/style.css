@@ -183,7 +183,7 @@ button:hover {
 }
 
 
-#btn_back, #btn_contract_register, #btn_agent_register, #btn_bill_register {
+#btn_back, #btn_contract_register, #btn_agent_register, #btn_bill_register, #btn_save {
     width: 185px;
     height: 35px;
     margin: 10px 0 0 0;

@@ -45,8 +45,8 @@ def from_python() -> list:
         contract_bills_quey = session.query(Bill).filter_by(contract_number=item[1].number).all()
         bills_total_sum = 0
 
-        # суммы всех счетов кладем в список счетов чтобы в дальнейшем при изменении или удалении счета
-        # в остатке суммы счета получать корректную сумму.
+        # для корректного отображения баланса договора после редактирования или удаления
+        # счета каждый раз высчитываем общую сумму счетов по договору
         for bill in contract_bills_quey:
             bills_total_sum += bill.bill_sum
 
@@ -54,7 +54,7 @@ def from_python() -> list:
         data_dict['agent_name'] = item[0].name
         data_dict['description'] = item[1].description
         data_dict['contract_sum'] = item[1].contract_sum
-        data_dict['contract_balance'] = item[1].contract_sum - bills_total_sum
+        data_dict['contract_balance'] = item[1].contract_sum - bills_total_sum  #сумма договора минус сумма всех счетов договора
         data_dict['date_of_conclusion'] = item[1].date_of_conclusion.strftime('%d.%m.%Y')
         data_dict['date_of_start'] = item[1].date_of_start.strftime('%d.%m.%Y')
         data_dict['date_of_end'] = item[1].date_of_end.strftime('%d.%m.%Y')
@@ -275,6 +275,41 @@ def add_new_bill(data: dict):
         print(f"У контрагента {data['agent_name']} нет договора № {data['contract_number']}")
     
     return False
+
+
+bill_detail_data = {}
+@eel.expose
+def bill_detail (contract_number, bill_number):
+    """
+    редактирование счета
+
+    получаем из JS данные contract_number, bill_number.
+    делаем запрос к БД
+
+    полученные данные кладем в глобальную переменную "bill_detail_data" чтобы потом в JS коде можно было вызвать функцию
+    отрисовки DOM страницы с полученными из глобальной переменной "bill_detail_data" данными
+    """
+    global bill_detail_data
+    bill = session.query(Bill).filter_by(contract_number=contract_number, bill_number=bill_number).first()
+    data = {'bill_number': bill.bill_number,
+            'bill_sum': bill.bill_sum,
+            'bill_date': bill.bill_date.strftime('%d.%m.%Y'),
+            'act_number': bill.act_number,
+            'act_sum': bill.act_sum,
+            'act_date': bill.act_date.strftime('%d.%m.%Y')
+    }
+    bill_detail_data = data
+
+
+@eel.expose
+def return_bill_detail_to_js():
+    """
+    функция для вызова из JS кода со страницы "bill_detail.html"
+    передаст в JS данные из глобальной переменной "bill_detail_data" для последующей отрисовки DOM
+    """
+
+    data = bill_detail_data
+    eel.print_bill_detail_data(data)
 
 
 @eel.expose
