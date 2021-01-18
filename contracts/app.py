@@ -214,7 +214,7 @@ def return_contract_detail_to_js():
     """
 
     data = contract_detail_data['data']
-    pprint(data)
+    # pprint(data)
     eel.print_contract_detail_data(data)
 
 
@@ -305,6 +305,10 @@ def bill_detail(contract_number, bill_number):
 
 @eel.expose
 def bill_updated_data(data):
+    """
+    обновление даныых счета ("bill_detail.html")
+    """
+
     contract_number = data[0]  #эти данные нужны для корректного запроса к базе данных
     bill_old_number = data[1]  #така они составляют PrimaryKeyConstraint модели Bill
 
@@ -369,9 +373,27 @@ def all_agents() -> list:
     return agents_list
 
 
+agent_from_all_agents_list = {}
+@eel.expose
+def agent_from_all_agents(agent_name):
+    """
+    выбираем контрагента со страницы "agaents_list.html"
+    """
+
+    global agent_from_all_agents_list
+    agent_from_all_agents_list['name'] = session.query(Agent).filter_by(name=agent_name).first().name
+    eel.redirect_to_agent_detail_page()
+
+
+@eel.expose
+def return_agent_name_to_agent_detail_js():
+    eel.print_agent_data(agent_from_all_agents_list['name'])
+
+
 # create_tables()
 # delete_all_tables()
 # from_python()
+
 
 if __name__ == '__main__':
     eel.start('index.html', size=(1400, 600))

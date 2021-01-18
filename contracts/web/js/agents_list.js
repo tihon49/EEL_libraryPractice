@@ -28,8 +28,23 @@ async function show_all_agents() {
         td_options.append(option_btn);
         tr.append(td_options);
 
-        index++
+        let agent_name = agent;
+        option_btn.addEventListener('click', function() {
+            // console.log(agent_name);
+            eel.agent_from_all_agents(agent_name);
+        });
+
+        index++;
     };
 }
 
 show_all_agents();
+
+// функция перенаправления на страницу редактирования контрагента
+eel.expose(redirect_to_agent_detail_page);
+function redirect_to_agent_detail_page() {
+    window.location = ('agent_detail.html');
+}
+
+
+//TODO: кнопку "удалить"

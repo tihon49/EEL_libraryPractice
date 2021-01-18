@@ -95,4 +95,3 @@ function refresh_contracts_detail() {
 async function refresh_page_data(agent_name, contract_number) {
     await eel.get_agent_details(agent_name, contract_number);
 }
-//TODO: При нажатии на кнопку "сохранить" сохранять изменеия в счете
