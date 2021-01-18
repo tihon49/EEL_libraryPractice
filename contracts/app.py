@@ -245,7 +245,7 @@ def add_new_bill(data: dict):
 
     # проверка валидности договора
     contract = session.query(Contract).filter_by(agent_id=agent_id, number=data['contract_number']).first()
-    print(contract)
+    # print(contract)
 
     if contract:
         # проверим вдруг счет с таким номером у данного договора уже есть
@@ -395,8 +395,17 @@ def agent_delete(agent_name):
     agent = session.query(Agent).filter_by(name=agent_name).first()
     session.delete(agent)
     session.commit()
-    print(f'{agent} удален из БД')
+    # print(f'{agent} удален из БД')
     eel.refresh_agents_list_page()
+
+
+@eel.expose
+def update_agent_name(agent_old_name, agent_new_name):
+    agent = session.query(Agent).filter_by(name=agent_old_name).first()
+    agent.name = agent_new_name
+    session.commit()
+    eel.redirect_to_agents_list()
+
 
 # create_tables()
 # delete_all_tables()
