@@ -390,6 +390,14 @@ def return_agent_name_to_agent_detail_js():
     eel.print_agent_data(agent_from_all_agents_list['name'])
 
 
+@eel.expose
+def agent_delete(agent_name):
+    agent = session.query(Agent).filter_by(name=agent_name).first()
+    session.delete(agent)
+    session.commit()
+    print(f'{agent} удален из БД')
+    eel.refresh_agents_list_page()
+
 # create_tables()
 # delete_all_tables()
 # from_python()
