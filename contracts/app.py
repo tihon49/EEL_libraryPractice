@@ -279,7 +279,7 @@ def add_new_bill(data: dict):
 
 bill_detail_data = {}
 @eel.expose
-def bill_detail (contract_number, bill_number):
+def bill_detail(contract_number, bill_number):
     """
     редактирование счета
 
@@ -291,7 +291,9 @@ def bill_detail (contract_number, bill_number):
     """
     global bill_detail_data
     bill = session.query(Bill).filter_by(contract_number=contract_number, bill_number=bill_number).first()
-    data = {'bill_number': bill.bill_number,
+    data = {'agent_id': bill.agent_id,
+            'contract_number': bill.contract_number,
+            'bill_number': bill.bill_number,
             'bill_sum': bill.bill_sum,
             'bill_date': bill.bill_date.strftime('%d.%m.%Y'),
             'act_number': bill.act_number,
@@ -299,6 +301,35 @@ def bill_detail (contract_number, bill_number):
             'act_date': bill.act_date.strftime('%d.%m.%Y')
     }
     bill_detail_data = data
+
+
+@eel.expose
+def bill_updated_data(data):
+    contract_number = data[0]  #эти данные нужны для корректного запроса к базе данных
+    bill_old_number = data[1]  #така они составляют PrimaryKeyConstraint модели Bill
+
+    bill_new_number = data[2]
+    bill_date = data[3]
+    bill_sum = data[4]
+    act_number = data[5]
+    act_date = data[6]
+    act_sum = data[7]
+    agent_id = data[8]
+
+    bill = session.query(Bill).filter_by(contract_number=contract_number, bill_number=bill_old_number).first()
+    agent_name = session.query(Agent).filter_by(id=agent_id).first().name
+    
+    bill.bill_number = bill_new_number
+    bill.bill_date = bill_date
+    bill.bill_sum = bill_sum
+    bill.act_number = act_number
+    bill.act_date = act_date
+    bill.act_sum = act_sum
+
+    session.commit()
+    # print(f'Имя контрагента: {agent_name}, номер договора: {contract_number}')
+    get_agent_details(agent_name, contract_number)
+    eel.refresh_contracts_detail()
 
 
 @eel.expose
