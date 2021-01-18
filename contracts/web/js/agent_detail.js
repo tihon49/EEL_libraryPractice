@@ -13,7 +13,7 @@ function print_agent_data(data){
     agent_old_name = data;
 
     let form = document.createElement('form');
-    form.innerHTML = `<input style="background-color: rgb(248, 248, 231); width: 800px; text-align: center;" type="text" id="agent_name" required value="${data}">`;
+    form.innerHTML = `<input style="background-color: rgb(248, 248, 231); width: 500px; text-align: center; margin-top: 0;" type="text" id="agent_name" required value="${data}">`;
 
     let new_line = document.createElement('tr');
     let new_td = document.createElement('td');
@@ -40,3 +40,5 @@ eel.expose(redirect_to_agents_list);
 function redirect_to_agents_list() {
     window.location = ('agents_list.html');
 }
+
+//TODO: добавить вывод всех счетов контрагента с возможностью редактирования данных договора
