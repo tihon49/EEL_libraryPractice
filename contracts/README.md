@@ -19,3 +19,9 @@
 
 ### Детальное отображение договора
 ![Иллюстрация к проекту](https://github.com/tihon49/EEL_libraryPractice/blob/master/contracts/documentation_src/contract_detail.png/)
+
+### Список контрагентов
+![Иллюстрация к проекту](https://github.com/tihon49/EEL_libraryPractice/blob/master/contracts/documentation_src/agents_list.png/)
+
+### Детальное отображение контрагента
+![Иллюстрация к проекту](https://github.com/tihon49/EEL_libraryPractice/blob/master/contracts/documentation_src/agent_detail.png/)
