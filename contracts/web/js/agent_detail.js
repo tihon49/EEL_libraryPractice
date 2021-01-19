@@ -49,7 +49,7 @@ function print_agent_data(data){
 
         options_TD.style = 'width: 105px; height: 50px;'
         btn_options.style = 'height: 33px; width: 33px;'
-        img_btn_options.src = 'img/cogs.svg';
+        img_btn_options.src = 'img/repair.svg';
 
         new_line.append(options_TD);
         options_TD.append(btn_options);
