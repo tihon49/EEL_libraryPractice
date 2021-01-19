@@ -374,6 +374,18 @@ def all_agents() -> list:
 
 
 agent_from_all_agents_list = {}
+def refresh_contracts_list(agent):
+    global agent_from_all_agents_list
+
+    all_contracts = agent.contracts
+    contracts_list = []
+    for contract in all_contracts:
+        contracts_list.append({'contract_number': contract.number,
+                               'contract_description': contract.description})
+    
+    return contracts_list
+
+
 @eel.expose
 def agent_from_all_agents(agent_name):
     """
@@ -381,13 +393,18 @@ def agent_from_all_agents(agent_name):
     """
 
     global agent_from_all_agents_list
-    agent_from_all_agents_list['name'] = session.query(Agent).filter_by(name=agent_name).first().name
+
+    agent = session.query(Agent).filter_by(name=agent_name).first()
+    agent_from_all_agents_list['name'] = agent.name
+    agent_from_all_agents_list['agent_id'] = agent.id
+    agent_from_all_agents_list['contracts'] = refresh_contracts_list(agent)
+    
     eel.redirect_to_agent_detail_page()
 
 
 @eel.expose
 def return_agent_name_to_agent_detail_js():
-    eel.print_agent_data(agent_from_all_agents_list['name'])
+    eel.print_agent_data(agent_from_all_agents_list)
 
 
 @eel.expose
@@ -395,16 +412,40 @@ def agent_delete(agent_name):
     agent = session.query(Agent).filter_by(name=agent_name).first()
     session.delete(agent)
     session.commit()
+    
     # print(f'{agent} удален из БД')
     eel.refresh_agents_list_page()
 
 
-@eel.expose
+@eel.expose 
 def update_agent_name(agent_old_name, agent_new_name):
+    """Изменение имени контрагента при нажатии на кнопку "Сохранить"
+       на страницу "agent_detail.html"
+    """
+
     agent = session.query(Agent).filter_by(name=agent_old_name).first()
     agent.name = agent_new_name
     session.commit()
     eel.redirect_to_agents_list()
+
+
+@eel.expose
+def contract_delete(agent_id, contract_number):
+    """
+    удаление договора на странице "agent_detail.html"
+    при нажатии на кнопку "удалить"
+    """
+
+    contract = session.query(Contract).filter_by(agent_id=agent_id, number=contract_number).first()
+    session.delete(contract)
+    session.commit()
+
+    global agent_from_all_agents_list
+
+    agent = session.query(Agent).filter_by(id=agent_id).first()
+    agent_from_all_agents_list['contracts'] = refresh_contracts_list(agent)
+    eel.refresh_agent_detail()
+    
 
 
 # create_tables()
@@ -413,4 +454,4 @@ def update_agent_name(agent_old_name, agent_new_name):
 
 
 if __name__ == '__main__':
-    eel.start('index.html', size=(1400, 600))
+    eel.start('index.html', size=(1400, 700))
