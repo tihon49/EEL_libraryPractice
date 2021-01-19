@@ -47,7 +47,7 @@ function print_agent_data(data){
             btn_options = document.createElement('button'),
             img_btn_options = document.createElement('img');
 
-        options_TD.style = 'width: 105px;'
+        options_TD.style = 'width: 105px; height: 50px;'
         btn_options.style = 'height: 33px; width: 33px;'
         img_btn_options.src = 'img/cogs.svg';
 
