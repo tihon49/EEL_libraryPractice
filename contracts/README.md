@@ -11,7 +11,7 @@
 ### Главная страница
 ![Иллюстрация к проекту](https://github.com/tihon49/EEL_libraryPractice/blob/master/contracts/documentation_src/main.png/)
 
-### Добавление нового контрагента
+### Добавление нового договора
 ![Иллюстрация к проекту](https://github.com/tihon49/EEL_libraryPractice/blob/master/contracts/documentation_src/add_contract.png/)
 
 ### Добавить новый счет
