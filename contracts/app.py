@@ -5,6 +5,9 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm.session import sessionmaker
 import eel
 from pprint import pprint
+from datetime import date, datetime
+
+from sqlalchemy.sql.expression import desc
 
 from models import Agent, Contract, Bill, create_tables, delete_all_tables
 
@@ -63,12 +66,12 @@ def from_python() -> list:
         data_dict['days_left'] = item[1].days_left
         data_dict['state'] = item[1].state
         
-        if data_dict['state'] and  data_dict['days_left'] > 0:
+        if data_dict['days_left'] > 0:
             data_dict['state'] = 'Активен'
         else:
             data_dict['state'] = 'Истек'
             data_dict['days_left'] = 0
-            item[1].state = False
+            # item[1].state = False
             session.commit()
 
         data_list.append(data_dict)
@@ -144,8 +147,6 @@ def add_contract_into_db(data: dict):
         eel.alert_message(f'У контрагента {agent_query[0].name} уже есть договор № {contract_query[0].number}')
         print(f'У контрагента {agent_query[0].name} уже есть договор № {contract_query[0].number}')
         return False
-
-    from datetime import date, datetime
 
     start_year = int(data['date_of_start'].split('.')[2])
     start_month = int(data['date_of_start'].split('.')[1])
@@ -445,7 +446,88 @@ def contract_delete(agent_id, contract_number):
     agent = session.query(Agent).filter_by(id=agent_id).first()
     agent_from_all_agents_list['contracts'] = refresh_contracts_list(agent)
     eel.refresh_agent_detail()
+
+
+contract_update_data = {}
+@eel.expose
+def update_coontract_name(agent_id, contract_number):
+    """
+    функция обновления данных договора
+    получаем данные контракта, перенаправляем на страницу редактирования контракта
+    """
     
+    global contract_update_data
+    contract = session.query(Contract).filter_by(agent_id=agent_id, number=contract_number).first()
+    contract_update_data = {'agent_id': agent_id,
+                            'agent_name': contract.agent.name,
+                            'contract_number': contract.number,
+                            'description': contract.description,
+                            'contract_sum': contract.contract_sum,
+                            'date_of_conclusion': contract.date_of_conclusion.strftime('%d.%m.%Y'),
+                            'date_of_start': contract.date_of_start.strftime('%d.%m.%Y'),
+                            'date_of_end': contract.date_of_end.strftime('%d.%m.%Y'),
+                            'state': contract.state}
+ 
+    eel.redirect_to_contract_update_page()
+
+
+@eel.expose
+def get_contract_update_data():
+    """для получения словаря 'contract_update_data' в JS коде"""
+    return contract_update_data
+    
+
+@eel.expose
+def update_contract_data(data: list):
+    """обновление данных контракта"""
+
+    agent_id = data[0]
+    contract_old_number = data[1]
+    contract_new_number = data[2]
+    description = data[3]
+    contract_sum = data[4]
+    date_of_conclusion = data[5]
+    date_of_start = data[6]
+    date_of_end = data[7]
+    # state = data[8]
+
+    start_year = int(date_of_start.split('.')[2])
+    start_month = int(date_of_start.split('.')[1])
+    start_day = int(date_of_start.split('.')[0])
+    date_of_start = date(start_year, start_month, start_day)
+
+    end_year = int(date_of_end.split('.')[2])
+    end_month = int(date_of_end.split('.')[1])
+    end_day = int(date_of_end.split('.')[0])
+    date_of_end = date(end_year, end_month, end_day)
+
+    validity = (date_of_end - date_of_start).days
+    now = datetime.now().date()
+    days_passed = (now - date_of_start).days
+    days_left = (date_of_end - now).days
+
+    contract = session.query(Contract).filter_by(agent_id=agent_id, number=contract_old_number).first()
+     
+    contract.number = contract_new_number
+    contract.description = description
+    contract.contract_sum = contract_sum
+    contract.date_of_conclusion = date_of_conclusion
+    contract.date_of_start = date_of_start.strftime('%d.%m.%Y')
+    contract.date_of_end = date_of_end.strftime('%d.%m.%Y')
+    contract.validity = validity
+    contract.days_passed = days_passed
+    contract.days_left = days_left
+    # contract.state = state
+
+    session.commit()
+
+    global agent_from_all_agents_list
+
+    agent = session.query(Agent).filter_by(id=agent_id).first()
+    agent_from_all_agents_list['contracts'] = refresh_contracts_list(agent)
+
+    eel.redirect_to_agent_detail_page()
+
 
 
 # create_tables()

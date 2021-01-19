@@ -55,6 +55,12 @@ function print_agent_data(data){
         options_TD.append(btn_options);
         btn_options.append(img_btn_options);
 
+        //обработчик кнопки редактирования договора
+        btn_options.addEventListener('click', function() {
+            eel.update_coontract_name(agent_id, contract_number);
+        })
+
+
         //кнопка удалить
         let delete_TD = document.createElement('td'),
             btn_delete = document.createElement('button'),
@@ -74,9 +80,7 @@ function print_agent_data(data){
 
             if (confirm_delete) {
                 eel.contract_delete(agent_id, contract_number);
-            }
-
-            
+            }            
         })
     }
 }
@@ -106,4 +110,11 @@ function redirect_to_agents_list() {
 eel.expose(refresh_agent_detail);
 function refresh_agent_detail() {
     window.location = ('agent_detail.html');
+}
+
+
+//функция перенаправления на страницу редактирования договора
+eel.expose(redirect_to_contract_update_page);
+function redirect_to_contract_update_page() {
+    window.location = ('contract_update.html')
 }

@@ -14,7 +14,7 @@ async function show_all_agents() {
 
         let td_name = document.createElement('td');
         td_name.innerHTML = agent;
-        td_name.style = 'border: 1px solid #e8e8ec;';
+        td_name.style = 'border: 1px solid #e8e8ec; width: 200px;';
         tr.append(td_name);
 
         let td_options = document.createElement('td'),
