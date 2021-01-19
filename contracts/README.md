@@ -9,4 +9,5 @@
 при этом автоматически происходит валидация данных и запись в базу данных (postgresql).
 
 ### Главная страница
-![Иллюстрация к проекту](https://github.com/tihon49/EEL_libraryPractice/tree/master/contracts/documentation_src/main.png)
+
+![Иллюстрация к проекту](https://github.com/tihon49/EEL_libraryPractice/blob/master/contracts/documentation_src/main.png/)
