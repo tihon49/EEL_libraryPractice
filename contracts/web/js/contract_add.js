@@ -4,8 +4,7 @@ let choose_agent = document.querySelector('#agents_names');
 async function main() {
     //имена всех контрагентов для удобного выбора
     let agents_list = await eel.all_agents()();
-    console.log(agents_list);
-
+    // console.log(agents_list);
     
     for (i of agents_list) {
         let option = document.createElement('option');

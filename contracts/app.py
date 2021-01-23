@@ -32,24 +32,6 @@ def show_full_data():
 
 
 @eel.expose
-def get_agent_contracts(agent_name) -> list:
-    """получаем все номера договоров выбрвнного контрагента"""
-
-    try:
-        agent = session.query(Agent).filter_by(name=agent_name).first()
-        contracts = agent.contracts
-        contracts_list = []
-
-        for i in contracts:
-            contracts_list.append(i.number)
-
-        return contracts_list
-
-    except:
-        return None
-
-
-@eel.expose
 def from_python() -> list:
     """
     данную функцию можно вызывать из js кода
