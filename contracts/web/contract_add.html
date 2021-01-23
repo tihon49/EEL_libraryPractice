@@ -13,7 +13,8 @@
 
     <div class="box table_div">
         <form action="#">
-            <input  type="text" id="agent_name" required placeholder="Имя контрагента">
+            <input  list="agents_names" id="agent_name" required placeholder="Имя контрагента">
+            <datalist id="agents_names"></datalist>
             <input  type="text" id="number" required placeholder="Номер договора">
             <textarea c id="description" required placeholder="Предмет договора"></textarea>
             <input  type="Integer" id="contract_sum" required placeholder="Сумма договора">

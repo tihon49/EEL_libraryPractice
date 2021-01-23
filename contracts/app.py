@@ -23,11 +23,30 @@ eel.init('web')
 def show_full_data():
     """Получаем полные данные по контрагентам"""
 
+    #сортируем вывод договоров на главной странице
     query = session.query(Agent, Contract).filter(Agent.id == Contract.agent_id).order_by(
                                            Contract.state.desc()).order_by(
-                                               Agent.id).order_by(
+                                               Agent.name).order_by(
                                                    Contract.number).all()
     return query
+
+
+@eel.expose
+def get_agent_contracts(agent_name) -> list:
+    """получаем все номера договоров выбрвнного контрагента"""
+
+    try:
+        agent = session.query(Agent).filter_by(name=agent_name).first()
+        contracts = agent.contracts
+        contracts_list = []
+
+        for i in contracts:
+            contracts_list.append(i.number)
+
+        return contracts_list
+
+    except:
+        return None
 
 
 @eel.expose
@@ -66,12 +85,16 @@ def from_python() -> list:
         data_dict['days_left'] = item[1].days_left
         data_dict['state'] = item[1].state
         
-        if data_dict['days_left'] > 0:
+        if data_dict['days_left'] > 0 and data_dict['contract_balance'] > 0:
             data_dict['state'] = 'Активен'
+        elif data_dict['contract_balance'] <= 0:
+            data_dict['state'] = 'Выбран'
+            item[1].state = False
+            session.commit()
         else:
             data_dict['state'] = 'Истек'
             data_dict['days_left'] = 0
-            # item[1].state = False
+            item[1].state = False
             session.commit()
 
         data_list.append(data_dict)

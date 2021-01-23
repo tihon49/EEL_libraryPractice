@@ -18,7 +18,7 @@ async function detail_agent_btn(agent_name, contract_number) {
 
 // эта функция вызывается из python кода, и получает данные из БД
 // которые так же получаются в python коде
-eel.expose(get_data); // Это вместо декоратора питоновского
+eel.expose(get_data);  // Это вместо декоратора питоновского
 function get_data(data){
     // Привязываемся к тегу таблицы
     let table = document.querySelector('table'),

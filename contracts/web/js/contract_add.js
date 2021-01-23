@@ -1,4 +1,20 @@
 let btn = document.querySelector('#btn_contract_register');
+let choose_agent = document.querySelector('#agents_names');
+
+async function main() {
+    //имена всех контрагентов для удобного выбора
+    let agents_list = await eel.all_agents()();
+    console.log(agents_list);
+
+    
+    for (i of agents_list) {
+        let option = document.createElement('option');
+        option.innerHTML = `<option value="${i}"></option>`;
+        choose_agent.append(option);
+    }
+}
+
+main();
 
 btn.addEventListener('click', function() {
     let agent_name = document.querySelector('#agent_name').value,
