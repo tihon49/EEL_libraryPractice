@@ -1,6 +1,6 @@
 # Программа для отслеживания состояний договоров
 
-## Проект реализован на python библиотеке [Eel.](https://pypi.org/project/Eel/)
+## Проект реализован на Python библиотеке [Eel](https://pypi.org/project/Eel/), ORM [SQLAlchemy](https://pypi.org/project/SQLAlchemy/) и немного JavaScript.
 
 <br>
 
@@ -19,7 +19,7 @@
 
 <br>
 
-### Второстепенная идея заключалась в простом интересе "поженить" Python и JavaScript, и сделать это НЕ с помощью Electorn.js
+### Второстепенная идея заключалась в простом интересе "поженить" Python и JavaScript, и сделать это НЕ с помощью Electron.js
 
 <br><hr><br>
 
