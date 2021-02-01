@@ -57,7 +57,7 @@ function print_agent_data(data){
 
         //обработчик кнопки редактирования договора
         btn_options.addEventListener('click', function() {
-            eel.update_coontract_name(agent_id, contract_number);
+            eel.update_contract_name(agent_id, contract_number);
         })
 
 

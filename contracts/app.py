@@ -11,7 +11,6 @@ from sqlalchemy.sql.expression import desc
 
 from models import Agent, Contract, Bill, create_tables, delete_all_tables
 
-
 engine = db.create_engine('postgresql+psycopg2://contracts_admin:1234@localhost:5432/contracts_db')
 connection = engine.connect()
 Base = declarative_base()
@@ -23,20 +22,21 @@ eel.init('web')
 def show_full_data():
     """Получаем полные данные по контрагентам"""
 
-    #сортируем вывод договоров на главной странице
+    # сортируем вывод договоров на главной странице
     query = session.query(Agent, Contract).filter(Agent.id == Contract.agent_id).order_by(
-                                           Contract.state.desc()).order_by(
-                                               Agent.name).order_by(
-                                                   Contract.number).all()
+        Contract.state.desc()).order_by(
+        Agent.name).order_by(
+        Contract.number).all()
     return query
 
 
 @eel.expose
-def from_python() -> list:
+def from_python():
     """
     данную функцию можно вызывать из js кода
     return: передает в js_функцию 'get_data()' данные из БД в виде списка 'data_list'
     """
+
     data = show_full_data()  # получаем все договоры из БД
     data_list = []
 
@@ -44,21 +44,22 @@ def from_python() -> list:
     # передавать будем словарь    
     for item in data:
         data_dict = {}
-        
+
         # получаем все счета данного контракта
-        contract_bills_quey = session.query(Bill).filter_by(contract_number=item[1].number).all()
+        contract_bills_query = session.query(Bill).filter_by(contract_number=item[1].number).all()
         bills_total_sum = 0
 
         # для корректного отображения баланса договора после редактирования или удаления
         # счета каждый раз высчитываем общую сумму счетов по договору
-        for bill in contract_bills_quey:
+        for bill in contract_bills_query:
             bills_total_sum += bill.bill_sum
 
         data_dict['contract_number'] = item[1].number
         data_dict['agent_name'] = item[0].name
         data_dict['description'] = item[1].description
         data_dict['contract_sum'] = item[1].contract_sum
-        data_dict['contract_balance'] = item[1].contract_sum - bills_total_sum  #сумма договора минус сумма всех счетов договора
+        # сумма договора минус сумма всех счетов договора
+        data_dict['contract_balance'] = item[1].contract_sum - bills_total_sum
         data_dict['date_of_conclusion'] = item[1].date_of_conclusion.strftime('%d.%m.%Y')
         data_dict['date_of_start'] = item[1].date_of_start.strftime('%d.%m.%Y')
         data_dict['date_of_end'] = item[1].date_of_end.strftime('%d.%m.%Y')
@@ -66,7 +67,7 @@ def from_python() -> list:
         data_dict['days_passed'] = item[1].days_passed
         data_dict['days_left'] = item[1].days_left
         data_dict['state'] = item[1].state
-        
+
         if data_dict['days_left'] > 0 and data_dict['contract_balance'] > 0:
             data_dict['state'] = 'Активен'
         elif data_dict['contract_balance'] <= 0:
@@ -87,12 +88,11 @@ def from_python() -> list:
 
 @eel.expose
 def add_new_agent(agent_name):
-    """валидация и запись нового контрагента в БД
-
-    Args:
-        agent_name (str): имя контрагента из формы на стр. agent_add.html
     """
-    
+    валидация и запись нового контрагента в БД
+    agent_name (str): имя контрагента из формы на стр. agent_add.html
+    """
+
     agent = session.query(Agent).filter_by(name=agent_name).all()
 
     # проверка на наличие контрагента в базе данных
@@ -167,33 +167,39 @@ def add_contract_into_db(data: dict):
     now = datetime.now().date()
     days_passed = (now - date_of_start).days
     days_left = (date_of_end - now).days
-        
-    new_contract = Contract(agent_id = agent_id,
-                            number = data['number'],
-                            description = data['description'],
-                            contract_sum = data['contract_sum'],
-                            contract_balance = data['contract_sum'], 
-                            date_of_conclusion = data['date_of_conclusion'],
-                            date_of_start = data['date_of_start'],
-                            date_of_end = data['date_of_end'],
-                            validity = validity,
-                            days_passed = days_passed,
-                            days_left = days_left
-    )
+
+    new_contract = Contract(agent_id=agent_id,
+                            number=data['number'],
+                            description=data['description'],
+                            contract_sum=data['contract_sum'],
+                            contract_balance=data['contract_sum'],
+                            date_of_conclusion=data['date_of_conclusion'],
+                            date_of_start=data['date_of_start'],
+                            date_of_end=data['date_of_end'],
+                            validity=validity,
+                            days_passed=days_passed,
+                            days_left=days_left
+                            )
 
     session.add(new_contract)
     session.commit()
     eel.alert_message('Новый договор добавлен!')
-    print('Новый договор добавлен!')
+    # print('Новый договор добавлен!')
     return True
 
 
+# глобальная переменная для хранения данных выбранного договора
+# и последующего обращения к данной переменной из js кода
 contract_detail_data = {}
+
+
 @eel.expose
 def get_agent_details(agent_name, contract_number):
-    """после нажатия на кнопку детального отображения договора передаем в 
-       словарь contract_detail_data данные по контракту в виде списка
     """
+    после нажатия на кнопку детального отображения договора передаем в
+    словарь contract_detail_data данные по контракту в виде списка
+    """
+
     # print(agent_name, contract_number)
     agent_id = session.query(Agent).filter_by(name=agent_name).first().id
     contract = session.query(Contract).filter_by(agent_id=agent_id, number=contract_number).first()
@@ -206,7 +212,7 @@ def get_agent_details(agent_name, contract_number):
                 'act_number': bill.act_number,
                 'act_sum': bill.act_sum,
                 'act_date': bill.act_date.strftime('%d.%m.%Y')
-        }
+                }
         contract_bills.append(data)
 
     # print(contract.number, agent_name, contract.bills)
@@ -215,8 +221,9 @@ def get_agent_details(agent_name, contract_number):
 
 @eel.expose
 def return_contract_detail_to_js():
-    """передаем на js сторону список с данными по договору
-       для отображения в таблице на странице
+    """
+    передаем на js сторону список с данными по договору
+    для отображения в таблице на странице
     """
 
     data = contract_detail_data['data']
@@ -226,10 +233,9 @@ def return_contract_detail_to_js():
 
 @eel.expose
 def add_new_bill(data: dict):
-    """валидация и добавление нового счета
-
-    Args:
-        data (dict): словарь с данными счета из bill_add.js 
+    """
+    валидация и добавление нового счета
+    data (dict): словарь с данными счета из bill_add.js
     """
 
     # проверка на заполнение всех полей
@@ -269,7 +275,7 @@ def add_new_bill(data: dict):
                             act_date=act_date)
             session.add(new_bill)
             session.commit()
-    
+
             eel.alert_message(f'Счет {bill_number} успешно добавлен!')
             print(f'Счет {bill_number} успешно добавлен!')
             return True
@@ -279,11 +285,13 @@ def add_new_bill(data: dict):
     else:
         eel.alert_message(f"У контрагента {data['agent_name']} нет договора № {data['contract_number']}")
         print(f"У контрагента {data['agent_name']} нет договора № {data['contract_number']}")
-    
+
     return False
 
 
+# глобальная переменная для использования в функции bill_detail
 bill_detail_data = {}
+
 @eel.expose
 def bill_detail(contract_number, bill_number):
     """
@@ -295,6 +303,7 @@ def bill_detail(contract_number, bill_number):
     полученные данные кладем в глобальную переменную "bill_detail_data" чтобы потом в JS коде можно было вызвать функцию
     отрисовки DOM страницы с полученными из глобальной переменной "bill_detail_data" данными
     """
+
     global bill_detail_data
     bill = session.query(Bill).filter_by(contract_number=contract_number, bill_number=bill_number).first()
     data = {'agent_id': bill.agent_id,
@@ -305,7 +314,7 @@ def bill_detail(contract_number, bill_number):
             'act_number': bill.act_number,
             'act_sum': bill.act_sum,
             'act_date': bill.act_date.strftime('%d.%m.%Y')
-    }
+            }
     bill_detail_data = data
 
 
@@ -315,8 +324,8 @@ def bill_updated_data(data):
     обновление даныых счета ("bill_detail.html")
     """
 
-    contract_number = data[0]  #эти данные нужны для корректного запроса к базе данных
-    bill_old_number = data[1]  #така они составляют PrimaryKeyConstraint модели Bill
+    contract_number = data[0]  # эти данные нужны для корректного запроса к базе данных
+    bill_old_number = data[1]  # така они составляют PrimaryKeyConstraint модели Bill
 
     bill_new_number = data[2]
     bill_date = data[3]
@@ -328,7 +337,7 @@ def bill_updated_data(data):
 
     bill = session.query(Bill).filter_by(contract_number=contract_number, bill_number=bill_old_number).first()
     agent_name = session.query(Agent).filter_by(id=agent_id).first().name
-    
+
     bill.bill_number = bill_new_number
     bill.bill_date = bill_date
     bill.bill_sum = bill_sum
@@ -363,8 +372,8 @@ def bill_delete_python(contract_number, bill_number):
     session.commit()
     print(f'Счет №{bill.bill_number} удален из базы данных.')
     eel.alert_message(f'Счет №{bill.bill_number} удален из базы данных.')
-    eel.refresh_contracts_detail()  #обновление страницы
-    
+    eel.refresh_contracts_detail()  # обновление страницы
+
 
 @eel.expose
 def all_agents() -> list:
@@ -380,7 +389,13 @@ def all_agents() -> list:
 
 
 agent_from_all_agents_list = {}
+
 def refresh_contracts_list(agent):
+    """
+    получаем все договоры выбранного контрагента и полученные данные кладем в глобальную
+    переменную agent_from_all_agents_list для последующего обращения к ней из js кода
+    """
+
     global agent_from_all_agents_list
 
     all_contracts = agent.contracts
@@ -388,14 +403,14 @@ def refresh_contracts_list(agent):
     for contract in all_contracts:
         contracts_list.append({'contract_number': contract.number,
                                'contract_description': contract.description})
-    
+
     return contracts_list
 
 
 @eel.expose
 def agent_from_all_agents(agent_name):
     """
-    выбираем контрагента со страницы "agaents_list.html"
+    выбираем контрагента со страницы "agents_list.html"
     """
 
     global agent_from_all_agents_list
@@ -404,7 +419,7 @@ def agent_from_all_agents(agent_name):
     agent_from_all_agents_list['name'] = agent.name
     agent_from_all_agents_list['agent_id'] = agent.id
     agent_from_all_agents_list['contracts'] = refresh_contracts_list(agent)
-    
+
     eel.redirect_to_agent_detail_page()
 
 
@@ -415,18 +430,23 @@ def return_agent_name_to_agent_detail_js():
 
 @eel.expose
 def agent_delete(agent_name):
+    """
+    удаление контрагента
+    """
+
     agent = session.query(Agent).filter_by(name=agent_name).first()
     session.delete(agent)
     session.commit()
-    
+
     # print(f'{agent} удален из БД')
     eel.refresh_agents_list_page()
 
 
-@eel.expose 
+@eel.expose
 def update_agent_name(agent_old_name, agent_new_name):
-    """Изменение имени контрагента при нажатии на кнопку "Сохранить"
-       на страницу "agent_detail.html"
+    """
+    Изменение имени контрагента при нажатии на кнопку "Сохранить"
+    на странице "agent_detail.html"
     """
 
     agent = session.query(Agent).filter_by(name=agent_old_name).first()
@@ -454,13 +474,15 @@ def contract_delete(agent_id, contract_number):
 
 
 contract_update_data = {}
+
 @eel.expose
-def update_coontract_name(agent_id, contract_number):
+def update_contract_name(agent_id, contract_number):
     """
     функция обновления данных договора
-    получаем данные контракта, перенаправляем на страницу редактирования контракта
+    получаем данные договора
+    перенаправляем на страницу редактирования договора
     """
-    
+
     global contract_update_data
     contract = session.query(Contract).filter_by(agent_id=agent_id, number=contract_number).first()
     contract_update_data = {'agent_id': agent_id,
@@ -472,15 +494,16 @@ def update_coontract_name(agent_id, contract_number):
                             'date_of_start': contract.date_of_start.strftime('%d.%m.%Y'),
                             'date_of_end': contract.date_of_end.strftime('%d.%m.%Y'),
                             'state': contract.state}
- 
+
     eel.redirect_to_contract_update_page()
 
 
 @eel.expose
 def get_contract_update_data():
     """для получения словаря 'contract_update_data' в JS коде"""
+
     return contract_update_data
-    
+
 
 @eel.expose
 def update_contract_data(data: list):
@@ -512,7 +535,7 @@ def update_contract_data(data: list):
     days_left = (date_of_end - now).days
 
     contract = session.query(Contract).filter_by(agent_id=agent_id, number=contract_old_number).first()
-     
+
     contract.number = contract_new_number
     contract.description = description
     contract.contract_sum = contract_sum
@@ -532,7 +555,6 @@ def update_contract_data(data: list):
     agent_from_all_agents_list['contracts'] = refresh_contracts_list(agent)
 
     eel.redirect_to_agent_detail_page()
-
 
 
 # create_tables()

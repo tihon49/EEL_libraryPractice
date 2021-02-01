@@ -72,9 +72,13 @@ class Bill(Base):
 
 
 def create_tables():
+    """Создать таблицы"""
+
     Base.metadata.create_all(engine)
     return
 
 
 def delete_all_tables():
+    """Удалить таблицы"""
+
     Base.metadata.drop_all(bind=engine)
