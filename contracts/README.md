@@ -1,4 +1,4 @@
-# Программа для отслеживания состояний договоров
+# Desktop программа для отслеживания состояний договоров
 
 ## Проект реализован на Python библиотеке [Eel](https://pypi.org/project/Eel/), ORM [SQLAlchemy](https://pypi.org/project/SQLAlchemy/) и немного JavaScript.
 
