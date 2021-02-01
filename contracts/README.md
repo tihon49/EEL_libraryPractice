@@ -50,3 +50,7 @@
 
 ### Детальное отображение контрагента
 ![Иллюстрация к проекту](https://github.com/tihon49/EEL_libraryPractice/blob/master/contracts/documentation_src/agent_detail.png/)
+
+<br><hr><br>
+
+### TODO: Придумать дизайн дополнительных окон (добавление контрагента и т.д.)
